@@ -10,7 +10,7 @@ A Chip-8 Emulator written in javascript
 # Debug Features
 * Register Display
 
-# TODO
+# Features TODO
 * Configure Instruction Stepping
 * List Opcode Instructions on Right of Register Screen with short descriptions at each step
 * Hex Dump
