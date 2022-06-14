@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
+
+    <title>Chippy</title>
+</head>
+
+<body class="color-granite-gray">
+    <section class="p-5">
+        <div class="text-center text-white">
+            <h1>Welcome to Chippy!</h1>
+        </div>
+    </section>
+    <section class="p-5">
+        <div class="d-flex flex-column">
+            <div class="container d-flex flex-xl-row flex-column p-5 justify-content-center border">
+                <div class="col-auto d-flex justify-content-center">
+                    <div class="card text-center m-3 h-100" style="width: 20rem;">
+                        <h5 class="card-header">Instruction Log</h5>
+                        <div class="card-body">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-auto d-flex justify-content-center">
+                    <canvas class="rounded m-3"></canvas>
+                </div>
+
+                <div class="col-auto d-flex justify-content-center">
+                    <div class="card text-center m-3 h-100" style="width: 20rem;">
+                        <h4 class="card-header">Registers</h4>
+                        <div class="card-body">
+                            <div class="row registers">
+                                <div class="col-6">
+                                    <div class="d-flex">
+                                        <div>V0--</div>
+                                        <div id="V0">0x--</div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div>V1--</div>
+                                        <div id="V1">0x--</div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div>V2--</div>
+                                        <div id="V2">0x--</div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div>V3--</div>
+                                        <div id="V3">0x--</div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div>V4--</div>
+                                        <div id="V4">0x--</div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div>V5--</div>
+                                        <div id="V5">0x--</div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div>V6--</div>
+                                        <div id="V6">0x--</div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div>V7--</div>
+                                        <div id="V7">0x--</div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div>V8--</div>
+                                        <div id="V8">0x--</div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div>V9--</div>
+                                        <div id="V9">0x--</div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div>VA--</div>
+                                        <div id="V10">0x--</div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div>VB--</div>
+                                        <div id="V11">0x--</div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div>VC--</div>
+                                        <div id="V12">0x--</div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div>VD--</div>
+                                        <div id="V13">0x--</div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div>VE--</div>
+                                        <div id="V14">0x--</div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div>VF--</div>
+                                        <div id="V15">0x--</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="d-flex">
+                                        <div>PC--</div>
+                                        <div id="PC">0x--</div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div>I--</div>
+                                        <div id="I">0x--</div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div>DT--</div>
+                                        <div id="DT">0x--</div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div>ST--</div>
+                                        <div id="ST">0x--</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container d-flex flex-xl-row flex-column p-5 justify-content-center border">
+                <div class="col-auto d-flex justify-content-center">
+                    <div class="card text-center m-3" style="width: 18rem;">
+                        <h5 class="card-header">Rom Selection</h5>
+                        <div class="card-body">
+    
+                            <div class="m-4">
+                                <button class="btn btn-primary" id="load" type="button" value="load" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true" title="Loads or Reloads the selected rom from the drop down">Load</button>
+                            </div>
+                            <div class="m-4">
+                                <h6>Rom Selection</h6>
+                                <select class="form-select" id="roms"></select>
+                            </div>
+                            <div class="m-4">
+                                <button disabled class="btn btn-primary" id="load" type="button" value="load" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true" title="Loads a selected rom from file">Select File</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto d-flex justify-content-center">
+                    <div class="card text-center m-3" style="width: 18rem;">
+                        <h5 class="card-header">Display Controls</h5>
+                        <div class="card-body">
+    
+                            <div class="m-4">
+                                <h6>Display Scale</h6>
+                                <input class="form-control rounded text-center" id="displayScale" type="number" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true" title="Scales the display"/>
+                            </div>
+                            <div class="m-4">
+                                <h6>Display FPS</h6>
+                                <input class="form-control rounded text-center" id="fps" type="number" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true" title="Handles the display refresh rate"/>
+                            </div>
+                            <div class="m-4">
+                                <div class="d-flex align-items-center justify-content-around">
+                                    <label for="bgColor" class="form-label">Background Color</label>
+                                    <input type="color" class="form-control form-control-color" id="bgColor">
+                                </div>
+                            </div>
+                            <div class="m-4">
+                                <div class="d-flex justify-content-around">
+                                    <label for="color" class="form-label">Foreground Color</label>
+                                    <input type="color" class="form-control form-control-color" id="color">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto d-flex justify-content-center">
+                    <div class="card text-center m-3" style="width: 18rem;">
+                        <h5 class="card-header">CPU Controls</h5>
+                        <div class="card-body">
+    
+                            <div class="m-4">
+                                <button class="btn btn-block btn-primary" id="pause" type="button"
+                                    value="pause" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true" title="Pauses the emulator">Pause</button>
+                            </div>
+                            <div class="m-4">
+                                <button class="btn btn-block btn-primary" id="step" type="button"  
+                                    value="Step" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true" title="Steps the CPU to the next Instruction">Step</button>
+                            </div>
+                            <div class="m-4">
+                                <h6>Instructions Per Frame</h6>
+                                <input class="form-control rounded text-center" id="speedStep" type="number" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true" title="Handles the instructions per frame"/>
+                            </div>
+                            <div class="m-4">
+                                <h6>Instruction Quirks</h6>
+                            </div>
+                            <div class="m-4">
+                                <select class="form-select" id="chipType" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true" title="Handles shift quirk and load quirk depending on CPU selection">
+                                    <option>No Quirk</option>
+                                    <option>Shift and Load Qurk</option>
+                                    <option>Shift Quirk Only</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto d-flex justify-content-center">
+                    <div class="card text-center m-3" style="width: 18rem;">
+                        <h5 class="card-header">Sound Controls</h5>
+                        <div class="card-body">
+    
+                            <div class="m-4">
+                                <div class="form-check d-flex justify-content-around">
+                                    <h6 class="form-check-label" for="sound">
+                                        Mute
+                                    </h6>
+                                    <input class="form-check-input" type="checkbox" value="" id="sound">
+                                </div>
+                            </div>
+                            <div class="m-4">
+                                <h6>Volume Control</h6>
+                                <input class="form-range rounded" id="volumeControl" type="range" step="0.01"
+                                    value="0.01" min="0" max="1" />
+                            </div>
+                            <div class="m-4">
+                                <h6>Oscillator Type</h6>
+                                <select class="form-select" id="oscillator">
+                                    <option>sine</option>
+                                    <option>square</option>
+                                    <option>sawtooth</option>
+                                    <option>triangle</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </section>
+
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script type="module" src="src/chip8.js"></script>
+</body>
+
+</html>
