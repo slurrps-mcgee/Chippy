@@ -1,6 +1,7 @@
 # Chippy
 A Chip-8 Emulator written in javascript
-(./images/Display.png)
+
+![Main Window](./images/Display.png)
 
 # Features
 * Display Controls
