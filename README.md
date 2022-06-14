@@ -15,7 +15,7 @@ A Chip-8 Emulator written in javascript
 * Register Display
 
 # Features TODO
-* List Opcode Instructions on Right of Register Screen with short descriptions at each step
+* Implement instruction log to the left
 * Hex Dump
 * Save State
 * Anti Flickering
