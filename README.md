@@ -1,6 +1,8 @@
 # Chippy
 A Chip-8 Emulator written in javascript
 
+[Live DEMO](https://kennethlamb.me/Chip-8%20Emulator/index.html)
+
 ![Main Window](./images/Display.png)
 
 # Features
