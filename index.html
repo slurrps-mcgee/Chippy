@@ -21,7 +21,9 @@
     </section>
     <section class="p-5">
         <div class="d-flex flex-column">
+            <!--Row 1 Main display and debug panels-->
             <div class="container d-flex flex-xl-row flex-column p-5 justify-content-center border">
+                <!--Instruction Log Panel-->
                 <div class="col-auto d-flex justify-content-center">
                     <div class="card text-center m-3 h-100" style="width: 20rem;">
                         <h5 class="card-header">Instruction Log</h5>
@@ -30,11 +32,11 @@
                         </div>
                     </div>
                 </div>
-
+                <!--Main Display-->
                 <div class="col-auto d-flex justify-content-center">
                     <canvas class="rounded m-3"></canvas>
                 </div>
-
+                <!--Registers Debug Panel-->
                 <div class="col-auto d-flex justify-content-center">
                     <div class="card text-center m-3 h-100" style="width: 20rem;">
                         <h4 class="card-header">Registers</h4>
@@ -130,6 +132,8 @@
                 </div>
             </div>
 
+            <!--Row 2 Controls-->
+            <!--Rom Selection-->
             <div class="container d-flex flex-xl-row flex-column p-5 justify-content-center border">
                 <div class="col-auto d-flex justify-content-center">
                     <div class="card text-center m-3" style="width: 18rem;">
@@ -149,6 +153,7 @@
                         </div>
                     </div>
                 </div>
+                <!--Display Controls-->
                 <div class="col-auto d-flex justify-content-center">
                     <div class="card text-center m-3" style="width: 18rem;">
                         <h5 class="card-header">Display Controls</h5>
@@ -177,6 +182,7 @@
                         </div>
                     </div>
                 </div>
+                <!--CPU Controls-->
                 <div class="col-auto d-flex justify-content-center">
                     <div class="card text-center m-3" style="width: 18rem;">
                         <h5 class="card-header">CPU Controls</h5>
@@ -198,7 +204,7 @@
                                 <h6>Instruction Quirks</h6>
                             </div>
                             <div class="m-4">
-                                <select class="form-select" id="chipType" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true" title="Handles shift quirk and load quirk depending on CPU selection">
+                                <select class="form-select" id="quirkType" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true" title="Handles shift quirk and load quirk depending on CPU selection">
                                     <option>No Quirk</option>
                                     <option>Shift and Load Qurk</option>
                                     <option>Shift Quirk Only</option>
@@ -207,6 +213,7 @@
                         </div>
                     </div>
                 </div>
+                <!--Sound Controls-->
                 <div class="col-auto d-flex justify-content-center">
                     <div class="card text-center m-3" style="width: 18rem;">
                         <h5 class="card-header">Sound Controls</h5>

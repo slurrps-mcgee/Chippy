@@ -1,3 +1,5 @@
+//This is the Emulator Class which will initialize the hardware and also any and all DOM Debug features on the html page
+
 //import { TIME_60_HZ } from "./Constants/CPUConstants.js";
 import { TIME_60_HZ } from "./Constants/CPUConstants.js";
 import { ROMS } from "./Constants/EmulatorConstants.js";
@@ -22,7 +24,7 @@ const cpu = new CPU(display, keyboard, speaker);
 const speedStepText = document.getElementById('speedStep');
 const stepCPU = document.getElementById('step');
 const pauseBtn = document.getElementById('pause')
-const quirk = document.getElementById('chipType');
+const quirk = document.getElementById('quirkType');
 
 //Display
 const displayScale = document.getElementById('displayScale');

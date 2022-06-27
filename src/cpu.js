@@ -1,3 +1,5 @@
+//This is the CPU which interacts with the rest of the hardware. It's main task is to performe a CPU Cycle measured in steps per cycle
+//Each Cycle will run  10 steps taking in OPCodes and executing them.
 
 import { SPRITES, SPRITE_WIDTH } from "./Constants/CharSet.js";
 import { STEP_SPEED } from "./Constants/CPUConstants.js";
@@ -5,8 +7,6 @@ import { LOAD_PROGRAM_ADDRESS, MEMORY_SIZE, SPRITE_SET_ADDRESS } from "./Constan
 import { Memory } from "./memory.js"
 import { Registers } from "./registers.js";
 import { Debug } from "./debug.js";
-
-const shiftQuirk = document.getElementById('shiftQuirk');
 
 export class CPU {
     constructor(display, keyboard, speaker) {
