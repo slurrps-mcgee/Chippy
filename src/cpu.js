@@ -1,6 +1,9 @@
 //This is the CPU which interacts with the rest of the hardware. It's main task is to performe a CPU Cycle measured in steps per cycle
 //Each Cycle will run  10 steps taking in OPCodes and executing them.
 
+//TEST
+import {wait} from "./Test/Test.js";
+
 import { SPRITES, SPRITE_WIDTH } from "./Constants/CharSet.js";
 import { STEP_SPEED } from "./Constants/CPUConstants.js";
 import { LOAD_PROGRAM_ADDRESS, MEMORY_SIZE, SPRITE_SET_ADDRESS } from "./Constants/MemoryConstants.js";
@@ -40,27 +43,14 @@ export class CPU {
 
     //Resets the CPU
     reset() {
-        //Reset Memory, Registers, and Display
+        //Reset Hardware
         this.memory.reset();
         this.registers.reset();
         this.display.reset();
 
+        //Clear Debug
         this.debug.reset();
 
-        //Load Sprites into memory
-        this.loadSpritesIntoMemory();
-    }
-
-    //Handled by requestAnimationFrame() method in chip8 file
-    // //Sleep Function used to stop program from freezing
-    // sleep(ms = TIME_60_HZ) {
-    //     return new Promise((resolve) => setTimeout(resolve, ms));
-    // }
-
-    //Load Sprites into memory
-    loadSpritesIntoMemory() {
-        //Load sprite array into memory starting at the sprite address 0x00
-        this.memory.memory.set(SPRITES, SPRITE_SET_ADDRESS);
     }
 
     ///Loads a selected rom into an arrayBuffer then calls loadRomIntoMemory
@@ -71,9 +61,7 @@ export class CPU {
         const arrayBuffer = await rom.arrayBuffer();
         const romBuffer = new Uint8Array(arrayBuffer);
 
-        //console.log(`${romName} loaded`);
         this.loadRomIntoMemory(romBuffer);
-
     }
 
     //Load a given romBuffer into memory
@@ -87,16 +75,27 @@ export class CPU {
         this.memory.memory.set(romBuffer, LOAD_PROGRAM_ADDRESS);
     }
 
-    //A CPU Cycle
+    //CPU Cycle..should be called at 60Hz for timers
     async cycle() {
+        await wait();
+
+        //Instructions per second
+        //Loop where speed is the timing of the CPU
         for (let i = 0; i < this.speed; i++) {
             if (!this.registers.paused) {
-                this.step();
+                await this.step();
 
             }
         }
 
+        // if (!this.registers.paused) {
+        //     await this.step();
+        // }
+
+        //TODO: Change these to their own 60Hz timer?
+        //Check if CPU is paused
         if (!this.registers.paused) {
+            //Update timers
             this.updateTimers();
         }
 
@@ -111,17 +110,17 @@ export class CPU {
 
     //A single instruction
     async step() {
-        //This is where the memory errors will come from 
-        this.opcode = this.memory.getOpCode(this.registers.PC); //Error is here
-        //console.log(this.opcode);
+        await wait();
+        
+        //Retrieve opcode from memory at program counter
+        this.opcode = this.memory.getOpCode(this.registers.PC);
 
         if (this.opcode !== 0) {
             this.executeInstruction(this.opcode);
 
-            //this.debug.log(this.opcode);
-
             //Debug Purposes all can be turned off with no issue
-            await this.debug.DebugRegisters(this);
+            this.debug.DebugRegisters(this);
+
             this.debug.printLast();
         }
     }
@@ -150,7 +149,7 @@ export class CPU {
     }
 
     //Using Disassembler
-    async executeInstruction(opcode) {
+    executeInstruction(opcode) {
         //Increment the program counter for next instruction
         //Each instruction is 2 bytes to increment by 2
         this.registers.PC += 2;
@@ -159,59 +158,73 @@ export class CPU {
         const { instruction, args } = this.disassember.disassemble(opcode);
         const { id } = instruction;
 
-        this.debug.logOpcode(`${opcode}: ${id}`)
-        // console.log('i', instruction);
-        // console.log('a', args);
-        // console.log('id', id);
+        //To hex or not to hex?
+        this.debug.logOpcode(`${instruction.id}: 0x${opcode.toString(16)}`)
 
         //Details on each instruction can be found inside the Constants/InstructinoSet.js file
+        //This includes name, mask, pattern, and arguments
         switch (id) {
+            //Chip8 Instructions
+            //00E0
             case 'CLS':
                 this.display.reset();
                 break;
+            //00EE
             case 'RET':
                 this.registers.PC = this.registers.stackPop();
                 break;
+            //1NNN
             case 'JP_ADDR':
                 this.registers.PC = args[0];
                 break;
+            //2NNN
             case 'CALL_ADDR':
                 this.registers.stackPush(this.registers.PC);
                 this.registers.PC = args[0];
                 break;
+            //3XKK
             case 'SE_VX_KK':
                 if (this.registers.V[args[0]] === args[1]) {
                     this.registers.PC += 2;
                 }
                 break;
+            //4XKK
             case 'SNE_VX_KK':
                 if (this.registers.V[args[0]] !== args[1]) {
                     this.registers.PC += 2;
                 }
                 break;
+            //5XY0
             case 'SE_VX_VY':
                 if (this.registers.V[args[0]] === this.registers.V[args[1]]) {
                     this.registers.PC += 2;
                 }
                 break;
+            //6XKK
             case 'LD_VX_KK':
                 this.registers.V[args[0]] = args[1];
                 break;
+            //7XKK
             case 'ADD_VX_KK':
                 this.registers.V[args[0]] += args[1];
                 break;
+            //8XY0
             case 'LD_VX_VY':
                 this.registers.V[args[0]] = this.registers.V[args[1]];
                 break;
+            //8XY1
             case 'OR_VX_VY':
                 this.registers.V[args[0]] |= this.registers.V[args[1]];
                 break;
+            //8XY2
             case 'AND_VX_VY':
                 this.registers.V[args[0]] &= this.registers.V[args[1]];
                 break;
+            ////8XY3
             case 'XOR_VX_VY':
                 this.registers.V[args[0]] ^= this.registers.V[args[1]];
                 break;
+            //8XY4
             case 'ADD_VX_VY':
                 let sum = (this.registers.V[args[0]] += this.registers.V[args[1]]);
 
@@ -223,6 +236,7 @@ export class CPU {
 
                 this.registers.V[args[0]] = sum;
                 break;
+            //8XY5
             case 'SUB_VX_VY':
                 this.registers.V[0xF] = 0;
 
@@ -232,20 +246,25 @@ export class CPU {
 
                 this.registers.V[args[0]] -= this.registers.V[args[1]];
                 break;
+            //8XY6
             case 'SHR_VX_VY':
+                //Set Vf to result of (Vx & 0x1)
                 this.registers.V[0xF] = (this.registers.V[args[0]] & 0x1);
 
                 //Quirk Behavior
                 if (this.quirk === "No Quirk") {
                     //Original CHIP 8
+                    //Set Vx = Vy shifted to the right 1 bit
                     this.registers.V[args[0]] = this.registers.V[args[1]] >>= 1;
                 }
                 else {
                     //Default
                     //CHIP48 and SCHIP behavior
+                    //Shift Vx to the right 1 bit
                     this.registers.V[args[0]] >>= 1;
                 }
                 break;
+            //8XY7
             case 'SUBN_VX_VY':
                 this.registers.V[0xF] = 0;
 
@@ -256,26 +275,32 @@ export class CPU {
                 this.registers.V[args[0]] = this.registers.V[args[1]] - this.registers.V[args[0]];
 
                 break;
+            //8XYE
             case 'SHL_VX_VY':
                 this.registers.V[0xF] = (this.registers.V[args[0]] & 0x80);
                 this.registers.V[args[0]] <<= 1;
                 break;
+            //9XY0
             case 'SNE_VX_VY':
                 if (this.registers.V[args[0]] !== this.registers.V[args[1]]) {
                     this.registers.PC += 2;
                 }
                 break;
+            //ANNN
             case 'LD_I_ADDR':
                 this.registers.I = args[0];
                 break;
+            //BNNN
             case 'JP_V0_ADDR':
                 this.registers.PC = (args[0]) + this.registers.V[0];
                 break;
+            //CXKK
             case 'RND_VX_KK':
                 let rand = Math.floor(Math.random() * 0xFF);
 
                 this.registers.V[args[0]] = rand & (opcode & 0xFF);
                 break;
+            //DXYN
             case 'DRW_VX_VY_N':
                 let width = SPRITE_WIDTH;
                 let height = (opcode & 0xF);
@@ -300,19 +325,23 @@ export class CPU {
 
                 this.drawFlag = true;
                 break;
+            //EX9E
             case 'SKP_VX':
                 if (this.keyboard.isKeyPressed(this.registers.V[args[0]])) {
                     this.registers.PC += 2;
                 }
                 break;
+            //EXA1
             case 'SKNP_VX':
                 if (!this.keyboard.isKeyPressed(this.registers.V[args[0]])) {
                     this.registers.PC += 2;
                 }
                 break;
+            //FX07
             case 'LD_VX_DT':
                 this.registers.V[args[0]] = this.registers.DT;
                 break;
+            //FX0A
             case 'LD_VX_K':
                 this.registers.paused = true;
 
@@ -321,18 +350,23 @@ export class CPU {
                     this.registers.paused = false;
                 }.bind(this);
                 break;
+            //FX15
             case 'LD_DT_VX':
                 this.registers.DT = this.registers.V[args[0]];
                 break;
+            //FX18
             case 'LD_ST_VX':
                 this.registers.ST = this.registers.V[args[0]];
                 break;
+            //FX1E
             case 'ADD_I_VX':
                 this.registers.I += this.registers.V[args[0]];
                 break;
+            //FX29
             case 'LD_F_VX':
                 this.registers.I = this.registers.V[args[0]] * 5;
                 break;
+            //FX33
             case 'LD_B_VX':
                 //Get Hundreds place
                 this.memory.memory[this.registers.I] = parseInt(this.registers.V[args[0]] / 100);
@@ -341,6 +375,7 @@ export class CPU {
                 //Get Ones place
                 this.memory.memory[this.registers.I + 2] = parseInt(this.registers.V[args[0]] % 10);
                 break;
+            //FX55
             case 'LD_I_VX':
                 //Test for Chip8 variation
                 for (let registerIndex = 0; registerIndex <= args[0]; registerIndex++) {
@@ -355,6 +390,7 @@ export class CPU {
                     this.registers.I += args[0];
                 }
                 break;
+            //FX65
             case 'LD_VX_I':
                 for (let registerIndex = 0; registerIndex <= args[0]; registerIndex++) {
                     this.registers.V[registerIndex] = this.memory.memory[this.registers.I + registerIndex];
@@ -371,258 +407,6 @@ export class CPU {
             default:
                 console.error(`Instruction with id ${id} not found`, instruction, args);
         }
-    }
-
-    //No disassemnbler
-    //CPU Instruction Executions via raw opcode
-    execute(opcode) {
-        //Increment the program counter for next instruction
-        //Each instruction is 2 bytes to increment by 2
-        this.registers.PC += 2;
-
-        //Test Disassembler Debug
-        const { instruction, args } = this.disassember.disassemble(opcode);
-        const { id } = instruction;
-
-        console.log('i', instruction);
-        console.log('a', args);
-        console.log('id', id);
-
-
-
-        //Second Value 2nd nibble then shift right by 8
-        let x = (opcode & 0x0F00) >> 8;
-        //Third Value 3rd nibble then shift right by 4
-        let y = (opcode & 0x00F0) >> 4;
-
-        //Use opcode with mask to determine execution
-        switch (opcode & 0xF000) {
-            case 0x0000:
-                switch (opcode) {
-                    case 0x00E0:
-                        this.display.reset();
-                        break;
-                    case 0x00EE:
-                        this.registers.PC = this.registers.stackPop();
-                        break;
-                }
-                break;
-            case 0x1000:
-                this.registers.PC = (opcode & 0xFFF);
-                break;
-            case 0x2000:
-                this.registers.stackPush(this.registers.PC);
-                this.registers.PC = (opcode & 0xFFF);
-                break;
-            case 0x3000:
-                if (this.registers.V[x] === (opcode & 0xFF)) {
-                    this.registers.PC += 2;
-                }
-                break;
-            case 0x4000:
-                if (this.registers.V[x] !== (opcode & 0xFF)) {
-                    this.registers.PC += 2;
-                }
-                break;
-            case 0x5000:
-                if (this.registers.V[x] === this.registers.V[y]) {
-                    this.registers.PC += 2;
-                }
-                break;
-            case 0x6000:
-                this.registers.V[x] = (opcode & 0xFF);
-                break;
-            case 0x7000:
-                this.registers.V[x] += (opcode & 0xFF);
-                break;
-            case 0x8000:
-                switch (opcode & 0xF) {
-                    case 0x0:
-                        this.registers.V[x] = this.registers.V[y];
-                        break;
-                    case 0x1:
-                        //Bitwise OR
-                        this.registers.V[x] |= this.registers.V[y];
-                        break;
-                    case 0x2:
-                        ///Bitwise AND
-                        this.registers.V[x] &= this.registers.V[y];
-                        break;
-                    case 0x3:
-                        //Bitwise XOR
-                        this.registers.V[x] ^= this.registers.V[y];
-                        break;
-                    case 0x4:
-                        let sum = (this.registers.V[x] += this.registers.V[y]);
-
-                        this.registers.V[0xF] = 0;
-
-                        if (sum > 0xFF) {
-                            this.registers.V[0xF] = 1;
-                        }
-
-                        this.registers.V[x] = sum;
-                        break;
-                    case 0x5:
-                        this.registers.V[0xF] = 0;
-
-                        if (this.registers.V[x] > this.registers.V[y]) {
-                            this.registers.V[0xF] = 1;
-                        }
-
-                        this.registers.V[x] -= this.registers.V[y];
-                        break;
-                    case 0x6:
-                        this.registers.V[0xF] = (this.registers.V[x] & 0x1);
-
-                        //Quirk Behavior
-                        if (this.quirk === "No Quirk") {
-                            //Original CHIP 8
-                            this.registers.V[x] = this.registers.V[y] >>= 1;
-                        }
-                        else {
-                            //Default
-                            //CHIP48 and SCHIP behavior
-                            this.registers.V[x] >>= 1;
-                        }
-                        break;
-                    case 0x7:
-                        this.registers.V[0xF] = 0;
-
-                        if (this.registers.V[y] > this.registers.V[x]) {
-                            this.registers.V[0xF] = 1;
-                        }
-
-                        this.registers.V[x] = this.registers.V[y] - this.registers.V[x];
-                        break;
-                    case 0xE:
-                        this.registers.V[0xF] = (this.registers.V[x] & 0x80);
-                        this.registers.V[x] <<= 1;
-                        break;
-                }
-
-                break;
-            case 0x9000:
-                if (this.registers.V[x] !== this.registers.V[y]) {
-                    this.registers.PC += 2;
-                }
-                break;
-            case 0xA000:
-                this.registers.I = (opcode & 0xFFF);
-                break;
-            case 0xB000:
-                this.registers.PC = (opcode & 0xFFF) + this.registers.V[0];
-                break;
-            case 0xC000:
-                let rand = Math.floor(Math.random() * 0xFF);
-
-                this.registers.V[x] = rand & (opcode & 0xFF);
-                break;
-            case 0xD000: //Draws Pixels
-                let width = SPRITE_WIDTH;
-                let height = (opcode & 0xF);
-
-                this.registers.V[0xF] = 0;
-
-                for (let row = 0; row < height; row++) {
-                    let sprite = this.memory.memory[this.registers.I + row];
-
-                    for (let col = 0; col < width; col++) {
-                        if ((sprite & 0x80) > 0) {
-                            //If setPixel returns 1, a pixel was erased and set VF to 1
-                            if (this.display.setPixel(this.registers.V[x] + col, this.registers.V[y] + row)) {
-                                this.registers.V[0xF] = 1;
-                            }
-                        }
-                        //Shift the sprite left 1, this will move to the next col/bit
-                        //Ex. 10010000 << 1 will become 0010000
-                        sprite <<= 1;
-                    }
-                }
-
-                this.drawFlag = true;
-                break;
-            case 0xE000:
-                switch (opcode & 0xFF) {
-                    case 0x9E:
-                        if (this.keyboard.isKeyPressed(this.registers.V[x])) {
-                            this.registers.PC += 2;
-                        }
-                        break;
-                    case 0xA1:
-                        if (!this.keyboard.isKeyPressed(this.registers.V[x])) {
-                            this.registers.PC += 2;
-                        }
-                        break;
-                }
-                break;
-            case 0xF000:
-                switch (opcode & 0xFF) {
-                    case 0x07:
-                        this.registers.V[x] = this.registers.DT;
-                        break;
-                    case 0x0A:
-                        this.registers.paused = true;
-
-                        this.keyboard.onNextKeyPress = function (key) {
-                            this.registers.V[x] = key;
-                            this.registers.paused = false;
-                        }.bind(this);
-                        break;
-                    case 0x15:
-                        this.registers.DT = this.registers.V[x];
-                        break;
-                    case 0x18:
-                        this.registers.ST = this.registers.V[x];
-                        break;
-                    case 0x1E:
-                        this.registers.I += this.registers.V[x];
-                        break;
-                    case 0x29:
-                        this.registers.I = this.registers.V[x] * 5;
-                        break;
-                    case 0x33:
-                        //Get Hundreds place
-                        this.memory.memory[this.registers.I] = parseInt(this.registers.V[x] / 100);
-                        //Get Tens place
-                        this.memory.memory[this.registers.I + 1] = parseInt((this.registers.V[x] % 100) / 10);
-                        //Get Ones place
-                        this.memory.memory[this.registers.I + 2] = parseInt(this.registers.V[x] % 10);
-                        break;
-                    case 0x55:
-                        //Test for Chip8 variation
-                        for (let registerIndex = 0; registerIndex <= x; registerIndex++) {
-                            this.memory.memory[this.registers.I + registerIndex] = this.registers.V[registerIndex];
-                        }
-
-                        //Check for quirk
-                        if (this.quirk === "No Quirk") {
-                            this.registers.I += x + 1;
-                        }
-                        else if (this.quirk === "Shift and Load Quirk") {
-                            this.registers.I += x;
-                        }
-                        break;
-                    case 0x65:
-                        for (let registerIndex = 0; registerIndex <= x; registerIndex++) {
-                            this.registers.V[registerIndex] = this.memory.memory[this.registers.I + registerIndex];
-                        }
-
-                        //Check for quirk
-                        if (this.quirk === "No Quirk") {
-                            this.registers.I += x + 1;
-                        }
-                        else if (this.quirk === "Shift and Load Qurk") {
-                            this.registers.I += x;
-                        }
-                        break;
-                }
-                break;
-
-            default:
-                throw new Error('Unknown opcode ' + opcode);
-        }
-
     }
 
 }

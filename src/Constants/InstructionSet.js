@@ -1,8 +1,8 @@
 export const MASK_NNN = { mask: 0x0fff };
-export const MASK_N = { mask: 0x000f };
+export const MASK_N = { mask: 0x000f }; //Nibble
 export const MASK_X = { mask: 0x0f00, shift: 8 };
 export const MASK_Y = { mask: 0x00f0, shift: 4 };
-export const MASK_KK = { mask: 0x00ff };
+export const MASK_KK = { mask: 0x00ff }; //Byte
 export const MASK_HIGHEST_BYTE = 0xf000;
 export const MASK_HIGHEST_AND_LOWEST_BYTE = 0xf00f;
 export const INSTRUCTION_SET = [
@@ -390,6 +390,19 @@ export const INSTRUCTION_SET = [
     pattern: 0xf065,
     arguments: [MASK_X],
   },
+
+
+
+  //Chip48 Instructions
+
+  {
+    key: 36,
+    id: 'SCD nibble',
+    name: 'SCD',
+    mask: MASK_N,
+    pattern: 0x00C0,
+    arguments: [],
+  }
 ];
 
 //TODO: Add Super chip8 instructions

@@ -1,4 +1,5 @@
-import { MEMORY_SIZE } from "./Constants/MemoryConstants.js";
+import { MEMORY_SIZE, SPRITE_SET_ADDRESS } from "./Constants/MemoryConstants.js";
+import { SPRITES } from "./Constants/CharSet.js";
 
 export class Memory {
     constructor() {
@@ -9,6 +10,7 @@ export class Memory {
 
     reset() {
         this.memory.fill(0)
+        this.memory.set(SPRITES, SPRITE_SET_ADDRESS);
     }
 
     setMemory(index, value) {
@@ -29,6 +31,5 @@ export class Memory {
 
     assertMemory(index) {
         console.assert(index >= 0 && index < MEMORY_SIZE, `Error trying to access memory at index ${index}`);
-        
     }
 }

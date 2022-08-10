@@ -12,11 +12,14 @@ export class Keyboard {
         window.addEventListener('keyup', this.onKeyUp.bind(this), false);
     }
 
-    isKeyPressed(keyCode) {
+    isKeyPressed(keyCode) {        
         return this.keyPressed[keyCode];
     }
 
     onKeyDown(event) {
+        console.log(event);
+
+
         let key = this.KEYMAP[event.which];
         this.keyPressed[key] = true;
     
