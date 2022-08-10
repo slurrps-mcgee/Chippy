@@ -39,6 +39,8 @@ export class CPU {
 
         //Handles Debug operations
         this.debug = new Debug();
+
+        this.instructions = 0;
     }
 
     //Resets the CPU
@@ -52,6 +54,8 @@ export class CPU {
         this.debug.reset();
 
     }
+
+
 
     ///Loads a selected rom into an arrayBuffer then calls loadRomIntoMemory
     async loadRom(romName) {
@@ -77,7 +81,7 @@ export class CPU {
 
     //CPU Cycle..should be called at 60Hz for timers
     async cycle() {
-        await wait();
+        //await wait();
 
         //Instructions per second
         //Loop where speed is the timing of the CPU
@@ -106,18 +110,25 @@ export class CPU {
             this.display.render(); //Render display
             this.drawFlag = false;
         }
+
     }
 
     //A single instruction
     async step() {
-        await wait();
+        //await wait();
         
         //Retrieve opcode from memory at program counter
         this.opcode = this.memory.getOpCode(this.registers.PC);
 
+        //Increment the program counter for next instruction
+        //Each instruction is 2 bytes to increment by 2
+        this.registers.PC += 2;
+
         if (this.opcode !== 0) {
             this.executeInstruction(this.opcode);
 
+
+            //DEBUG
             //Debug Purposes all can be turned off with no issue
             this.debug.DebugRegisters(this);
 
@@ -148,12 +159,11 @@ export class CPU {
         }
     }
 
+    
+
     //Using Disassembler
     executeInstruction(opcode) {
-        //Increment the program counter for next instruction
-        //Each instruction is 2 bytes to increment by 2
-        this.registers.PC += 2;
-
+        
         //Test Disassembler Debug
         const { instruction, args } = this.disassember.disassemble(opcode);
         const { id } = instruction;
