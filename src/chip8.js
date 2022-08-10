@@ -8,6 +8,7 @@ import { Display } from "./display.js";
 import { Keyboard } from "./keyboard.js";
 import { Speaker } from "./speaker.js";
 
+///////////////SETUP//////////////////
 //Create new instances of the hardware
 const display = new Display();
 const keyboard = new Keyboard();
@@ -15,10 +16,9 @@ const speaker = new Speaker();
 
 //Attatch the hardware to a new instance of the CPU
 const cpu = new CPU(display, keyboard, speaker);
+//////////////////////////////////////
 
-
-
-//Controls Constants
+////////////////////Page Controls Constants////////////////////
 
 //CPU
 const speedStepText = document.getElementById('speedStep');
@@ -43,8 +43,9 @@ const loadBtn = document.getElementById('load');
 
 //Logging
 
+/////////////////////////////////////////////////////////////
 
-//Add event listeners
+///////////////////////Controls Event listeners////////////////////////////
 //CPU
 pauseBtn.addEventListener('click', pause);
 stepCPU.addEventListener('click', stepNext);
@@ -67,11 +68,13 @@ loadBtn.addEventListener('click', loadSelectedRom);
 
 //Logging
 
-var fps = 60, now, then, interval, delta;
+/////////////////////////////////////////////////////////////////////////
+
+//Variables for calculating FPS
+var fps = TIME_60_HZ, now, then, interval, delta;
 
 function init() {
-
-    //Load Controls
+    //////////////Load Controls values//////////////////
     //CPU
     speedStepText.value = cpu.speed.toFixed(0);
     quirk.value = cpu.quirk;
@@ -92,22 +95,30 @@ function init() {
 
     //Logging
 
+    //////////////////////////////////////////////////////
 
-    //Call the loop
-    //Framerate
+    //////////Start Emulator//////////
+
+    //Framerate Calculations
     then = Date.now();
     interval = 1000/fps;
     
-    step();
+    //Call the loop
+    //Infinite Function
+    emuCycle();
+    ////////////////////////////////
 }
 
 //Recursive Function for Stepping through a CPU Cycle
-async function step() {
-    requestAnimationFrame(step);
+async function emuCycle() {
+    //Recursion
+    requestAnimationFrame(emuCycle);
 
+    //Framerate Calculations
     now = Date.now();
     delta = now - then;
 
+    //Loop
     if(delta > interval) {
         //Contextual Comments from https://gist.github.com/elundmark
         // update time stuffs
@@ -124,14 +135,17 @@ async function step() {
         // by subtracting delta (112) % interval (100).
         // Hope that makes sense.
         then = now - (delta % interval);
+
+        //Call the cpu cycle method
+        //each cycle is 10 steps
         cpu.cycle();
     }
 }
 
 
 
-//Properties
-//CPU
+////////////////////////Event Listener Functions/////////////////////
+///////////////////CPU
 //Pause the Console
 function pause() {
     if (cpu.registers.paused) {
@@ -144,7 +158,7 @@ function pause() {
     }
 }
 
-//Not Working
+//Step the CPU
 async function stepNext() {
     //await cpu.sleep();
     await cpu.step();
@@ -152,19 +166,22 @@ async function stepNext() {
     console.log("step");
 }
 
-
+//Change cpu speed
+//This changes how many steps per CPU cycle
 function ChangeSpeed() {
     this.speedValue = speedStepText.value;
 
     cpu.speed = this.speedValue;
 }
 
+//Turns on or off cpu quirk which handles different types of chip8 cpus
 function setQuirk() {
     cpu.quirk = quirk.value;
 }
 
-//Display
 
+////////////////////Display
+//Change the scale of the display on the page
 function ChangeScale() {
     this.scaleValue = displayScale.value;
     cpu.display.scale = this.scaleValue;
@@ -172,20 +189,23 @@ function ChangeScale() {
     cpu.display.render();
 }
 
+//Change FPS on emuCycle
 function changeFps() {
     fps = fpsScale.value;
     interval = 1000/fps;
 }
 
+//Changes the background color of the display
 function changeBGColor() {
     cpu.display.bgColor = bgColorInput.value;
 }
 
+//Changes the foreground color of the display
 function changeColor() {
     cpu.display.color = colorInput.value;
 }
 
-//ROMS
+////////////////////ROMS
 
 function loadRomNames() {
     ROMS.map(rom => {
@@ -204,7 +224,7 @@ function loadSelectedRom() {
 }
 
 
-//Sound
+////////////////////Sound
 
 function changeVolume() {
     cpu.speaker.volumeLevel = volumeControl.value;
@@ -222,6 +242,10 @@ function MuteAudio() {
         cpu.speaker.unMute(volumeControl.value);
     }
 }
+
+//////////////////Logging
+
+////////////////////////////////////////////////////////////
 
 //Call Initialization Function
 init();
