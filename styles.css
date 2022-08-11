@@ -6,7 +6,6 @@
     text-align: center;
     font-size: medium;
     font-weight: 600;
-
 }
 
 .card-register {
@@ -70,4 +69,12 @@
 .color-retro-orange {
     background-color: #FFB000;
     color: #282828;
+}
+
+@media(max-width: 576px) {
+    canvas {
+        width: 100%;
+    }
+
+
 }

@@ -52,12 +52,10 @@ export class CPU {
 
         //Clear Debug
         this.debug.reset();
-
     }
 
-
-
-    ///Loads a selected rom into an arrayBuffer then calls loadRomIntoMemory
+    //#region ROM Loading
+    //Loads a selected rom into an arrayBuffer then calls loadRomIntoMemory
     async loadRom(romName) {
         const rom = await fetch(`./roms/${romName}`);
 
@@ -78,44 +76,39 @@ export class CPU {
         //Insert rom into memory at location 0x200
         this.memory.memory.set(romBuffer, LOAD_PROGRAM_ADDRESS);
     }
+    //#endregion
 
-    //CPU Cycle..should be called at 60Hz for timers
+    //Maybe add two setintervals one for time and one for cpu?
+    //One CPU Cycle
     async cycle() {
         //await wait();
+        if(this.registers.paused)
+        {
+            return;
+        }
 
         //Instructions per second
         //Loop where speed is the timing of the CPU
         for (let i = 0; i < this.speed; i++) {
-            if (!this.registers.paused) {
-                await this.step();
-
-            }
+            await this.step();
         }
 
-        // if (!this.registers.paused) {
-        //     await this.step();
-        // }
+        //Update Timers
+        this.updateTimers();
+        //Play Sound
+        this.playSound(); 
 
-        //TODO: Change these to their own 60Hz timer?
-        //Check if CPU is paused
-        if (!this.registers.paused) {
-            //Update timers
-            this.updateTimers();
-        }
-
-        this.playSound(); //Play sound
-
-        //Render only if flag is true
+        //Render only if flag is true which indicates if a pixel was drawn
         if (this.drawFlag) {
             this.display.render(); //Render display
             this.drawFlag = false;
         }
-
     }
 
-    //A single instruction
+    //Performs one CPU step.
+    //One step means one getOpCode-execute cycle.
     async step() {
-        //await wait();
+        await wait();
         
         //Retrieve opcode from memory at program counter
         this.opcode = this.memory.getOpCode(this.registers.PC);
@@ -124,25 +117,29 @@ export class CPU {
         //Each instruction is 2 bytes to increment by 2
         this.registers.PC += 2;
 
+        //Check that the opcode is not empty
         if (this.opcode !== 0) {
+            //Execute instruction
             this.executeInstruction(this.opcode);
-
 
             //DEBUG
             //Debug Purposes all can be turned off with no issue
             this.debug.DebugRegisters(this);
-
-            this.debug.printLast();
+            //Prints last opcode that was ran
+            //this.debug.printLast();
         }
     }
 
+    //#region Timers and Sound
     //Update system timers
     updateTimers() {
         if (this.registers.DT > 0) {
+            //Decrease timer by 1
             this.registers.DT -= 1;
         }
 
         if (this.registers.ST > 0) {
+            //Decrease timer by 1
             this.registers.ST -= 1;
         }
     }
@@ -158,9 +155,8 @@ export class CPU {
             this.speaker.disableSound();
         }
     }
-
+    //#endregion
     
-
     //Using Disassembler
     executeInstruction(opcode) {
         

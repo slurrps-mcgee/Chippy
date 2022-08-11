@@ -25,8 +25,9 @@ const pauseBtn = document.getElementById('pause')
 const quirk = document.getElementById('quirkType');
 
 //Display
+
 const displayScale = document.getElementById('displayScale');
-const fpsScale = document.getElementById('fps'); //TODO: may move to cpu
+//const fpsScale = document.getElementById('fps'); //TODO: may move to cpu
 const bgColorInput = document.getElementById('bgColor');
 const colorInput = document.getElementById('color');
 
@@ -52,7 +53,7 @@ quirk.addEventListener('click', setQuirk)
 
 //Display
 displayScale.addEventListener('input', ChangeScale);
-fpsScale.addEventListener('input', changeFps)
+//fpsScale.addEventListener('input', changeFps)
 bgColorInput.addEventListener('change', changeBGColor);
 colorInput.addEventListener('change', changeColor);
 
@@ -65,6 +66,9 @@ muteControl.addEventListener('click', MuteAudio);
 loadBtn.addEventListener('click', loadSelectedRom);
 
 //Logging
+
+
+//Window
 
 //#endregion
 
@@ -79,7 +83,8 @@ function init() {
 
     //Display
     displayScale.value = cpu.display.scale;
-    fpsScale.value = fps;
+    //fpsScale.value = fps; //affects the timers which is a nono
+
     bgColorInput.value = cpu.display.bgColor;
     colorInput.value = cpu.display.color;
 
@@ -99,8 +104,8 @@ function init() {
 
     //Framerate Calculations
     then = Date.now();
-    interval = 1000/fps;
-    
+    interval = 1000 / fps;
+
     //Call the loop
     //Infinite Function
     emuCycle();
@@ -111,17 +116,24 @@ function init() {
 //This should run at 60Hz but can be changed by fps counter
 function emuCycle() {
 
-    //Recursion
-    requestAnimationFrame(emuCycle);
+    //Test Set Timeout
+    // function tick() {
+    //     setTimeout(() => {
+    //         window.requestAnimationFrame(tick)
+    //         cpu.cycle();
+    //     }, interval);
+    // }
+
+    // tick();
 
     //Framerate Calculations
     now = Date.now();
     delta = now - then;
 
-    if(delta > interval) {
+    //This will force 60Hz
+    if (delta > interval) {
         //Contextual Comments from https://gist.github.com/elundmark
         // update time stuffs
-         
         // Just `then = now` is not enough.
         // Lets say we set fps at 10 which means
         // each frame must take 100ms
@@ -139,6 +151,9 @@ function emuCycle() {
         //each cycle is 10 steps
         cpu.cycle();
     }
+
+    //Recursion
+    requestAnimationFrame(emuCycle);
 }
 
 //#endregion
@@ -196,18 +211,20 @@ function ChangeScale() {
 
 //Change FPS on emuCycle
 function changeFps() {
-    fps = fpsScale.value;
-    interval = 1000/fps;
+    // fps = fpsScale.value;
+    // interval = 1000/fps;
 }
 
 //Changes the background color of the display
 function changeBGColor() {
     cpu.display.bgColor = bgColorInput.value;
+    cpu.display.render();
 }
 
 //Changes the foreground color of the display
 function changeColor() {
     cpu.display.color = colorInput.value;
+    cpu.display.render();
 }
 //#endregion
 
@@ -255,7 +272,7 @@ function changeOscillator() {
 //Mutes the speaker
 function MuteAudio() {
     //Check if the control is checked
-    if(muteControl.checked) {
+    if (muteControl.checked) {
         //Mute the speaker. This will set it's volume to 0
         cpu.speaker.mute();
     }
