@@ -17,8 +17,7 @@ export class Keyboard {
     }
 
     onKeyDown(event) {
-        console.log(event);
-
+        //console.log(event);
 
         let key = this.KEYMAP[event.which];
         this.keyPressed[key] = true;

@@ -1,5 +1,10 @@
 * {
-    font-family: 'Helvetica', 'Arial', sans-serif;
+    font-family: 'IBM Plex Mono', 'Helvetica', 'Arial', sans-serif;
+}
+
+#fpsControl {
+    font-weight: 600;
+    display: none;
 }
 
 .registers {

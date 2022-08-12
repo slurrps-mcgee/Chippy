@@ -32,4 +32,9 @@ export class Debug {
         document.getElementById('ST').innerHTML = `0x${cpu.registers.ST.toString(16)}`
     }
 
+    ShowFPS(fps) {
+        let counter = document.getElementById('fpsCounter');
+
+        counter.innerHTML = fps;
+    }
 }
