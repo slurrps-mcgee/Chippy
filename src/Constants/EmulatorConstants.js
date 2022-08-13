@@ -1,3 +1,6 @@
+//Export Constants
+export const TIME_60_HZ = 1000 / 60; //60Hz
+//List of Roms Array
 export const ROMS = [
     '15PUZZLE',
     'BLINKY',

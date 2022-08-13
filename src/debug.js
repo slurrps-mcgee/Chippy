@@ -1,10 +1,14 @@
+//Export Class
 export class Debug {
+    //Called when a new instance of the class is created
     constructor() {
+        //Debug Properties
         this.opcodeLogs = new Array();
     }
 
+    //Reset function
     reset() {
-        this.opcodeLogs = new Array();
+        this.opcodeLogs.fill(0);
     }
 
     logOpcode(msg) {
@@ -29,12 +33,15 @@ export class Debug {
         //Delay Timer
         document.getElementById("DT").innerHTML = `0x${cpu.registers.DT.toString(16)}`;
         //Sound Timer
-        document.getElementById('ST').innerHTML = `0x${cpu.registers.ST.toString(16)}`
+        document.getElementById('ST').innerHTML = `0x${cpu.registers.ST.toString(16)}`;
     }
 
+    //Updates the fpsCounter UI
     ShowFPS(fps) {
+        //Get DOM element
         let counter = document.getElementById('fpsCounter');
 
+        //Set innerHTML to fps variable
         counter.innerHTML = fps;
     }
 }

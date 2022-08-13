@@ -1,10 +1,9 @@
 //This is the Emulator Class which will initialize the hardware and also any and all DOM Debug features on the html page
-
-import { TIME_60_HZ } from "./Constants/CPUConstants.js";
+import { TIME_60_HZ } from "./Constants/EmulatorConstants.js";
 import { CPU } from "./cpu.js";
 import { Display } from "./display.js";
 import { Keyboard } from "./keyboard.js";
-import { PageControls } from "./PageControls.js";
+import { Controls } from "./controls.js";
 import { Speaker } from "./speaker.js";
 
 //#region Initialize
@@ -17,7 +16,8 @@ const speaker = new Speaker();
 const cpu = new CPU(display, keyboard, speaker);
 //#endregion
 
-const controls = new PageControls(cpu);
+//Loads the pages controls and handles their events
+const controls = new Controls(cpu);
 
 //Variables for calculating FPS
 var now, then, delta;
@@ -62,7 +62,11 @@ function emuCycle() {
         //Call the cpu cycle method
         //each cycle is 10 steps
         cpu.cycle();
-        cpu.debug.ShowFPS(fps);
+
+        if(!cpu.registers.paused)
+        {
+            cpu.debug.ShowFPS(fps);
+        }
     }
 
     //Recursion

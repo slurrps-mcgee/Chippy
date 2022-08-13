@@ -30,12 +30,13 @@ const loadBtn = document.getElementById('load');
 
 //#endregion
 
+//Variable to hold the CPU instance
 var processor;
 
-export class PageControls {
+export class Controls {
     constructor(cpu) {
+        //CPU Instance
         processor = cpu;
-
 
         //#region Controls Event Listeners
         //CPU
@@ -64,7 +65,7 @@ export class PageControls {
         //Window
 
         //#endregion
-        console.log(processor);
+        
         this.loadControls();
     }
 
@@ -113,12 +114,10 @@ export class PageControls {
         processor.step();
         //Render the display
         processor.display.render();
-        //Log
-        console.log("step");
     }
 
     //Change cpu speed
-    //This changes how many steps per CPU cycle
+    //This changes how many instructions per CPU cycle
     ChangeSpeed() {
         this.speedValue = speedStepText.value;
 
@@ -210,7 +209,8 @@ export class PageControls {
     //Loads a selected rom into the program
     //ToDo: Change to take in a value so that user can load their own roms
     async loadSelectedRom() {
-        console.log(romSelect.value);
+        //console.log(romSelect.value);
+
         //Call the loadRom method from the CPU
         await processor.loadRom(romSelect.value);
         //Set the pauseBtn control text to read Pause as loading will unpause the CPU
@@ -223,6 +223,4 @@ export class PageControls {
     //#endregion
 
     //#endregion
-
-
 }

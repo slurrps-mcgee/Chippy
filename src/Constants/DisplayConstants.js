@@ -1,3 +1,4 @@
+//Export Constants
 export const DISPLAY_WIDTH = 64; //Width
 export const DISPLAY_HEIGHT = 32; //Height
 //export const SPRITE_HIGHT = 5;
