@@ -1,4 +1,6 @@
 //Export Class
+//Used to log all debug features
+
 export class Debug {
     //Called when a new instance of the class is created
     constructor() {

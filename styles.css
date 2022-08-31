@@ -7,6 +7,10 @@
     display: none;
 }
 
+#debugPanel {
+    display: none;
+}
+
 .registers {
     text-align: center;
     font-size: medium;

@@ -3,6 +3,7 @@ export class Speaker {
     //Called when creating an instance of the class
     constructor() {
         //Speaker properties
+        this.isMute = false;
         this.soundEnabled = false; //Holds whether the sound is enabled or not. Object defined in speaker init function
         this.volumeLevel = 0.3; //Holds the volume level of the speaker
         this.wave = "square"; //Holds the wave of the oscillator

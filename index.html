@@ -19,31 +19,142 @@
 </head>
 
 <body class="color-granite-gray">
-    <section class="p-5">
+    <section class="px-5 py-4">
         <div class="text-center text-white">
-            <h1>Welcome to Chippy!</h1>
+            <h1><b>Welcome to Chippy!</b></h1>
             <!--Add FPS-->
-            <h1 id="fpsControl">FPS: <span id="fpsCounter"></span></h1>
+            <h3 id="fpsControl">FPS: <span id="fpsCounter"></span></h3>
         </div>
     </section>
 
     <!--Canvas-->
     <section>
-        <div class="d-xl-flex justify-content-around border">
-            <div class="d-flex justify-content-center border">
+        <div class="d-flex justify-content-center">
+            <div class="px-5">
+                <canvas class="rounded"></canvas>
+            </div>
+            <div id="debugPanel" class="col-sm px-5">
                 <div class="card text-center w-100" style="min-width: 18rem;">
-                    <h5 class="card-header">Rom Instructions</h5>
+                    <h5 class="card-header">Registers</h5>
                     <div class="card-body">
+                        <div class="d-flex justify-content-around registers">
+                            <div class="d-flex flex-column">
+                                <div class="d-flex">
+                                    <div>PC--</div>
+                                    <div id="PC">0x--</div>
+                                </div>
+                                <div class="d-flex">
+                                    <div>I--</div>
+                                    <div id="I">0x--</div>
+                                </div>
+                                <div class="d-flex">
+                                    <div>DT--</div>
+                                    <div id="DT">0x--</div>
+                                </div>
+                                <div class="d-flex">
+                                    <div>ST--</div>
+                                    <div id="ST">0x--</div>
+                                </div>
+                            </div>
 
+                            <div class="d-flex flex-column">
+                                <div class="d-flex">
+                                    <div>V0--</div>
+                                    <div id="V0">0x--</div>
+                                </div>
+                                <div class="d-flex">
+                                    <div>V1--</div>
+                                    <div id="V1">0x--</div>
+                                </div>
+                                <div class="d-flex">
+                                    <div>V2--</div>
+                                    <div id="V2">0x--</div>
+                                </div>
+                                <div class="d-flex">
+                                    <div>V3--</div>
+                                    <div id="V3">0x--</div>
+                                </div>
+                                <div class="d-flex">
+                                    <div>V4--</div>
+                                    <div id="V4">0x--</div>
+                                </div>
+                                <div class="d-flex">
+                                    <div>V5--</div>
+                                    <div id="V5">0x--</div>
+                                </div>
+                                <div class="d-flex">
+                                    <div>V6--</div>
+                                    <div id="V6">0x--</div>
+                                </div>
+                                <div class="d-flex">
+                                    <div>V7--</div>
+                                    <div id="V7">0x--</div>
+                                </div>
+                                <div class="d-flex">
+                                    <div>V8--</div>
+                                    <div id="V8">0x--</div>
+                                </div>
+                                <div class="d-flex">
+                                    <div>V9--</div>
+                                    <div id="V9">0x--</div>
+                                </div>
+                                <div class="d-flex">
+                                    <div>VA--</div>
+                                    <div id="V10">0x--</div>
+                                </div>
+                                <div class="d-flex">
+                                    <div>VB--</div>
+                                    <div id="V11">0x--</div>
+                                </div>
+                                <div class="d-flex">
+                                    <div>VC--</div>
+                                    <div id="V12">0x--</div>
+                                </div>
+                                <div class="d-flex">
+                                    <div>VD--</div>
+                                    <div id="V13">0x--</div>
+                                </div>
+                                <div class="d-flex">
+                                    <div>VE--</div>
+                                    <div id="V14">0x--</div>
+                                </div>
+                                <div class="d-flex">
+                                    <div>VF--</div>
+                                    <div id="V15">0x--</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div class="d-flex justify-content-center border">
-                <canvas class="rounded"></canvas>
+    <!--Virtual keypad for mobile should be placed here-->
+
+
+    <!--Settings Panel-->
+    <section>
+        <div class="container d-flex justify-content-center align-items-center">
+            <div class="m-4">
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label text-white" for="debug">Debug</label>
+                    <input class="form-check-input" type="checkbox" value="" id="debug">
+                </div>
             </div>
+            <div class="my-2">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                    data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true" title="Open Settings"><i
+                        class="bi bi-sliders"></i></button>
+            </div>
+        </div>
+    </section>
 
-            <div class="d-flex justify-content-center border">
+    <!--Rom/Game Instructions/CPU Settings Panel-->
+    <section class="px-5 py-4">
+        <div class="row gy-4">
+            <!--Rom Selection-->
+            <div class="col-sm d-flex justify-content-center">
                 <div class="card text-center w-100" style="min-width: 18rem;">
                     <h5 class="card-header">Rom Selection</h5>
                     <div class="card-body">
@@ -64,16 +175,153 @@
                 </div>
             </div>
 
-            <!-- <div class="my-2">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true"
-                title="Open Settings"><i class="bi bi-sliders"></i></button>
-            </div> -->
-        </div>
+            <div class="col-sm d-flex justify-content-center">
+                <div class="card text-center w-100" style="min-width: 18rem;">
+                    <h5 class="card-header">CPU Controls</h5>
+                    <div class="card-body">
 
+                        <button class="btn btn-primary btn-block w-100 mb-2" id="pause" type="button" value="pause"
+                            data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true"
+                            title="Pauses the emulator">Pause</button>
+
+                        <button class="btn btn-primary btn-block w-100" id="step" type="button" value="Step"
+                            data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true"
+                            title="Steps the CPU to the next Instruction">Step</button>
+
+                        <div class="m-4">
+                            <h6>Instructions Per CPU cycle</h6>
+                            <input class="form-control rounded text-center" id="speedStep" type="number"
+                                data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true"
+                                title="Handles the instructions per cpu cycle" />
+                        </div>
+                        <div class="m-4">
+                            <h6>Instruction Quirks</h6>
+                        </div>
+                        <div class="m-4">
+                            <select class="form-select" id="quirkType" data-bs-toggle="tooltip" data-bs-placement="left"
+                                data-bs-animation="true"
+                                title="Handles shift quirk and load quirk depending on CPU selection">
+                                <option>No Quirk</option>
+                                <option>Shift and Load Qurk</option>
+                                <option>Shift Quirk Only</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Rom Instructions-->
+            <div class="col-sm d-flex justify-content-center">
+                <div class="card text-center w-100" style="min-width: 18rem;">
+                    <h5 class="card-header">Rom Instructions</h5>
+                    <div class="card-body">
+                        <!--Rom Instructions for selected rom that is loaded-->
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <section class="p-5">
-        <div class="row gy-3 border">
+    <!--Old Settings Panel --Not needed-->
+    <section class="px-5 pb-4">
+        <div class="row gy-4">
+            <!-- <div class="col-sm d-flex justify-content-center">
+                <div class="card text-center w-100" style="min-width: 18rem;">
+                    <h5 class="card-header">Display Controls</h5>
+                    <div class="card-body">
+
+                        <div class="m-4">
+                            <h6>Display Scale</h6>
+                            <input class="form-control rounded text-center" id="displayScale" type="number"
+                                data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true"
+                                title="Scales the display" />
+                        </div>
+                        <div class="m-4">
+                            <div class="d-flex align-items-end justify-content-around">
+                                <label for="bgColor" class="form-label">Background Color</label>
+                                <input type="color" class="form-control form-control-color" id="bgColor">
+                            </div>
+                        </div>
+                        <div class="m-4">
+                            <div class="d-flex align-items-end justify-content-around">
+                                <label for="color" class="form-label">Foreground Color</label>
+                                <input type="color" class="form-control form-control-color" id="color">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- <div class="col-sm d-flex justify-content-center">
+                <div class="card text-center w-100" style="min-width: 18rem;">
+                    <h5 class="card-header">CPU Controls</h5>
+                    <div class="card-body">
+
+                        <button class="btn btn-primary btn-block w-100 mb-2" id="pause" type="button" value="pause"
+                            data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true"
+                            title="Pauses the emulator">Pause</button>
+
+                        <button class="btn btn-primary btn-block w-100" id="step" type="button" value="Step"
+                            data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true"
+                            title="Steps the CPU to the next Instruction">Step</button>
+
+                        <div class="m-4">
+                            <h6>Instructions Per CPU cycle</h6>
+                            <input class="form-control rounded text-center" id="speedStep" type="number"
+                                data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true"
+                                title="Handles the instructions per cpu cycle" />
+                        </div>
+                        <div class="m-4">
+                            <h6>Instruction Quirks</h6>
+                        </div>
+                        <div class="m-4">
+                            <select class="form-select" id="quirkType" data-bs-toggle="tooltip" data-bs-placement="left"
+                                data-bs-animation="true"
+                                title="Handles shift quirk and load quirk depending on CPU selection">
+                                <option>No Quirk</option>
+                                <option>Shift and Load Qurk</option>
+                                <option>Shift Quirk Only</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- <div class="col-sm d-flex justify-content-center">
+                <div class="card text-center w-100" style="min-width: 18rem;">
+                    <h5 class="card-header">Sound Controls</h5>
+                    <div class="card-body">
+
+                        <div class="m-4">
+                            <div class="form-check form-check-inline">
+                                <label class="form-check-label" for="sound">Mute</label>
+                                <input class="form-check-input" type="checkbox" value="" id="sound">
+                            </div>
+                        </div>
+
+                        <div class="m-4">
+                            <h6>Volume Control</h6>
+                            <input class="form-range rounded" id="volumeControl" type="range" step="0.01" value="0.01"
+                                min="0" max="1" />
+                        </div>
+                        <div class="m-4">
+                            <h6>Oscillator Type</h6>
+                            <select class="form-select" id="oscillator">
+                                <option>sine</option>
+                                <option>square</option>
+                                <option>sawtooth</option>
+                                <option>triangle</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </section>
+
+    <!--Debug Panel-->
+    <section id="debugPanel" class="px-5 pb-4">
+        <div class="row gy-3">
             <div class="col-sm d-flex justify-content-center">
                 <div class="card text-center w-100" style="min-width: 18rem;">
                     <h5 class="card-header">Debug Options</h5>
@@ -82,7 +330,6 @@
                             <label class="form-check-label" for="showfps">Show FPS</label>
                             <input class="form-check-input" type="checkbox" value="" id="showfps">
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -186,146 +433,87 @@
 
     </section>
 
-    <section class="p-5">
-        <div class="row gy-3 border">
-            <!-- <div class="col-sm d-flex justify-content-center">
-                <div class="card text-center w-100" style="min-width: 18rem;">
-                    <h5 class="card-header">Rom Selection</h5>
-                    <div class="card-body">
-
-                        <button class="btn btn-primary btn-block w-100" id="load" type="button" value="load"
-                            data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true"
-                            title="Loads or Reloads the selected rom from the drop down">Load</button>
-
-                        <div class="m-4">
-                            <h6>Rom Selection</h6>
-                            <select class="form-select" id="roms"></select>
-                        </div>
-
-                        <button disabled class="btn btn-primary btn-block w-100" id="load" type="button" value="load"
-                            data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true"
-                            title="Loads a selected rom from file">Select File</button>
-                    </div>
-                </div>
-            </div> -->
-
-            <div class="col-sm d-flex justify-content-center">
-                <div class="card text-center w-100" style="min-width: 18rem;">
-                    <h5 class="card-header">Display Controls</h5>
-                    <div class="card-body">
-
-                        <div class="m-4">
-                            <h6>Display Scale</h6>
-                            <input class="form-control rounded text-center" id="displayScale" type="number"
-                                data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true"
-                                title="Scales the display" />
-                        </div>
-                        <!-- <div class="m-4">
-                            <h6>Display FPS</h6>
-                            <input class="form-control rounded text-center" id="fps" type="number" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true" title="Handles the display refresh rate"/>
-                        </div> -->
-                        <div class="m-4">
-                            <div class="d-flex align-items-end justify-content-around">
-                                <label for="bgColor" class="form-label">Background Color</label>
-                                <input type="color" class="form-control form-control-color" id="bgColor">
-                            </div>
-                        </div>
-                        <div class="m-4">
-                            <div class="d-flex align-items-end justify-content-around">
-                                <label for="color" class="form-label">Foreground Color</label>
-                                <input type="color" class="form-control form-control-color" id="color">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="col-sm d-flex justify-content-center">
-                <div class="card text-center w-100" style="min-width: 18rem;">
-                    <h5 class="card-header">CPU Controls</h5>
-                    <div class="card-body">
-
-                        <button class="btn btn-primary btn-block w-100 mb-2" id="pause" type="button" value="pause"
-                            data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true"
-                            title="Pauses the emulator">Pause</button>
-
-                        <button class="btn btn-primary btn-block w-100" id="step" type="button" value="Step"
-                            data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true"
-                            title="Steps the CPU to the next Instruction">Step</button>
-
-                        <div class="m-4">
-                            <h6>Instructions Per CPU cycle</h6>
-                            <input class="form-control rounded text-center" id="speedStep" type="number"
-                                data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true"
-                                title="Handles the instructions per cpu cycle" />
-                        </div>
-                        <div class="m-4">
-                            <h6>Instruction Quirks</h6>
-                        </div>
-                        <div class="m-4">
-                            <select class="form-select" id="quirkType" data-bs-toggle="tooltip" data-bs-placement="left"
-                                data-bs-animation="true"
-                                title="Handles shift quirk and load quirk depending on CPU selection">
-                                <option>No Quirk</option>
-                                <option>Shift and Load Qurk</option>
-                                <option>Shift Quirk Only</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm d-flex justify-content-center">
-                <div class="card text-center w-100" style="min-width: 18rem;">
-                    <h5 class="card-header">Sound Controls</h5>
-                    <div class="card-body">
-
-                        <div class="m-4">
-                            <div class="form-check form-check-inline">
-                                <label class="form-check-label" for="sound">Mute</label>
-                                <input class="form-check-input" type="checkbox" value="" id="sound">
-                            </div>
-                        </div>
-
-                        <div class="m-4">
-                            <h6>Volume Control</h6>
-                            <input class="form-range rounded" id="volumeControl" type="range" step="0.01" value="0.01"
-                                min="0" max="1" />
-                        </div>
-                        <div class="m-4">
-                            <h6>Oscillator Type</h6>
-                            <select class="form-select" id="oscillator">
-                                <option>sine</option>
-                                <option>square</option>
-                                <option>sawtooth</option>
-                                <option>triangle</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-
     <!--Modal-->
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content color-granite-gray">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h3 class="modal-title text-white" id="exampleModalLabel"><b>Settings</b></h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    ...
+                <div class="modal-body p-5">
+                    <section>
+                        <div class="row gy-3">
+                            <div class="col-sm d-flex justify-content-center">
+                                <div class="card text-center w-100" style="min-width: 18rem;">
+                                    <h5 class="card-header">Display Controls</h5>
+                                    <div class="card-body">
+
+                                        <div class="m-4">
+                                            <h6>Display Scale</h6>
+                                            <input class="form-control rounded text-center" id="displayScale"
+                                                type="number" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                data-bs-animation="true" title="Scales the display" />
+                                        </div>
+                                        <!-- <div class="m-4">
+                                            <h6>Display FPS</h6>
+                                            <input class="form-control rounded text-center" id="fps" type="number" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true" title="Handles the display refresh rate"/>
+                                        </div> -->
+                                        <div class="m-4">
+                                            <div class="d-flex align-items-end justify-content-around">
+                                                <label for="bgColor" class="form-label">Background Color</label>
+                                                <input type="color" class="form-control form-control-color"
+                                                    id="bgColor">
+                                            </div>
+                                        </div>
+                                        <div class="m-4">
+                                            <div class="d-flex align-items-end justify-content-around">
+                                                <label for="color" class="form-label">Foreground Color</label>
+                                                <input type="color" class="form-control form-control-color" id="color">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm d-flex justify-content-center">
+                                <div class="card text-center w-100" style="min-width: 18rem;">
+                                    <h5 class="card-header">Sound Controls</h5>
+                                    <div class="card-body">
+
+                                        <div class="m-4">
+                                            <div class="form-check form-check-inline">
+                                                <label class="form-check-label" for="sound">Mute</label>
+                                                <input class="form-check-input" type="checkbox" value="" id="sound">
+                                            </div>
+                                        </div>
+
+                                        <div class="m-4">
+                                            <h6>Volume Control <span id="volumeNumber"></span></h6>
+                                            <input class="form-range rounded" id="volumeControl" type="range"
+                                                step="0.01" value="0.01" min="0" max="1" />
+                                        </div>
+                                        <div class="m-4">
+                                            <h6>Oscillator Type</h6>
+                                            <select class="form-select" id="oscillator">
+                                                <option>sine</option>
+                                                <option>square</option>
+                                                <option>sawtooth</option>
+                                                <option>triangle</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                 </div>
-                <div class="modal-footer">
+                <!-- <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

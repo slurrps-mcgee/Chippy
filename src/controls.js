@@ -1,33 +1,38 @@
 import { ROMS } from "./Constants/EmulatorConstants.js";
-import { CPU } from "./cpu.js";
+import { Settings } from "./settings.js";
 
 //#region Page Controls
 //CPU
-const speedStepText = document.getElementById('speedStep');
+const speedStepText = document.getElementById('speedStep'); //Changable
 const stepCPU = document.getElementById('step');
 const pauseBtn = document.getElementById('pause')
-const quirk = document.getElementById('quirkType');
-
+const quirk = document.getElementById('quirkType'); //Changable
+ 
 //Display
-const displayScale = document.getElementById('displayScale');
+const displayScale = document.getElementById('displayScale'); //Changable
+
 //const fpsScale = document.getElementById('fps'); //TODO: may move to cpu
-const bgColorInput = document.getElementById('bgColor');
-const colorInput = document.getElementById('color');
+
+const bgColorInput = document.getElementById('bgColor'); //Changable
+const colorInput = document.getElementById('color'); //Changable
 
 const fps = document.getElementById('fpsControl');
 const showfps = document.getElementById('showfps');
 
 //Sound
-const volumeControl = document.getElementById('volumeControl')
-const oscillatorType = document.getElementById('oscillator');
-const muteControl = document.getElementById('sound');
+const volumeControl = document.getElementById('volumeControl');  //Changable
+const volumeLevel = document.getElementById('volumeNumber');
+const oscillatorType = document.getElementById('oscillator'); //Changable
+const muteControl = document.getElementById('sound'); //Changable
 
 //ROMS
 const romSelect = document.getElementById('roms');
 const loadBtn = document.getElementById('load');
 
-//Logging
+//Debug
+const debugChk = document.getElementById('debug');
 
+const settings = new Settings(); //Create new instance of settings
 //#endregion
 
 //Variable to hold the CPU instance
@@ -53,14 +58,16 @@ export class Controls {
 
         //Sound
         volumeControl.addEventListener('change', this.changeVolume);
+        volumeControl.addEventListener('input', this.sliderChange)
+
         oscillatorType.addEventListener('click', this.changeOscillator);
         muteControl.addEventListener('click', this.MuteAudio);
 
         //ROMS
         loadBtn.addEventListener('click', this.loadSelectedRom);
 
-        //Logging
-
+        //Debug
+        debugChk.addEventListener('click', this.showDebugOptions)
 
         //Window
 
@@ -69,27 +76,39 @@ export class Controls {
         this.loadControls();
     }
 
+    //Loads the controls with values from the emulator
     loadControls() {
+        settings.load(processor); //Load Local Storage int CPU
+
         //#region Controls Values Load
         //CPU
-        speedStepText.value = processor.speed.toFixed(0);
+        speedStepText.value = processor.speed;
         quirk.value = processor.quirk;
 
         //Display
         displayScale.value = processor.display.scale;
-        //fpsScale.value = fps; //affects the timers which is a nono
 
         bgColorInput.value = processor.display.bgColor;
         colorInput.value = processor.display.color;
 
         //Sound
-        volumeControl.value = processor.speaker.volumeLevel
+        volumeControl.value = processor.speaker.volumeLevel;
+        volumeLevel.innerHTML = processor.speaker.volumeLevel;
+
         oscillatorType.value = processor.speaker.wave;
-        muteControl.value = processor.speaker.soundEnabled
+
+        console.log(processor.speaker.isMute);
+
+
+        //#endregion
 
         //ROMS
         this.loadRomNames(); //Loads the roms from the roms folder
     }
+
+
+
+    //////////////////////////Methods to handle the controls///////////////////////////////////////
 
     //#region Controls Functions
     //#region CPU
@@ -119,36 +138,43 @@ export class Controls {
     //Change cpu speed
     //This changes how many instructions per CPU cycle
     ChangeSpeed() {
-        this.speedValue = speedStepText.value;
-
-        processor.speed = this.speedValue;
+        processor.speed = speedStepText.value;
+        
+        settings.save("speed", speedStepText.value); //Save value
     }
 
     //Turns on or off cpu quirk which handles different types of chip8 cpus
     setQuirk() {
         processor.quirk = quirk.value;
+
+        settings.save("quirk", quirk.value); //Save value
     }
     //#endregion
 
     //#region  Display
     //Change the scale of the display on the page
     ChangeScale() {
-        this.scaleValue = displayScale.value;
-        processor.display.scale = this.scaleValue;
-
+        processor.display.scale = displayScale.value;
+        
         processor.display.render();
+
+        settings.save("scale", displayScale.value);
     }
 
     //Changes the background color of the display
     changeBGColor() {
         processor.display.bgColor = bgColorInput.value;
         processor.display.render();
+
+        settings.save("bgColor", bgColorInput.value);
     }
 
     //Changes the foreground color of the display
     changeColor() {
         processor.display.color = colorInput.value;
         processor.display.render();
+
+        settings.save("color", colorInput.value);
     }
 
     ShowFpsCounter() {
@@ -166,12 +192,20 @@ export class Controls {
     changeVolume() {
         //Set the volumeLevel to the Control value
         processor.speaker.volumeLevel = volumeControl.value;
+        settings.save("volume", volumeControl.value);
     }
+    //Shows the volume level to user
+    sliderChange() {
+        volumeLevel.innerHTML = volumeControl.value;
+    }
+
 
     //Changes the Oscillator type in the speaker
     changeOscillator() {
         //Set the wave to the Control value
         processor.speaker.wave = oscillatorType.value;
+
+        settings.save("wave", oscillatorType.value);
     }
 
     //Mutes the speaker
@@ -180,10 +214,12 @@ export class Controls {
         if (muteControl.checked) {
             //Mute the speaker. This will set it's volume to 0
             processor.speaker.mute();
+            //settings.save("mute", true);
         }
         else {
             //unmute the speaker giving it the volume control value
             processor.speaker.unMute(volumeControl.value);
+            //settings.save("mute", false);
         }
     }
     //#endregion
@@ -218,8 +254,20 @@ export class Controls {
     }
     //#endregion
 
-    //#region Logging
+    //#region Debug
+    showDebugOptions()
+    {
+        let debugPanel = document.getElementById('debugPanel');
 
+        if(debugChk.checked)
+        {
+            debugPanel.style.display = "block"
+        }
+        else
+        {
+            debugPanel.style.display = "none"
+        }
+    }
     //#endregion
 
     //#endregion

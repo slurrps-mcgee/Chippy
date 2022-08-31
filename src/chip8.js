@@ -19,6 +19,7 @@ const cpu = new CPU(display, keyboard, speaker);
 //Loads the pages controls and handles their events
 const controls = new Controls(cpu);
 
+
 //Variables for calculating FPS
 var now, then, delta;
 
@@ -62,7 +63,6 @@ function emuCycle() {
         //Call the cpu cycle method
         //each cycle is 10 steps
         cpu.cycle();
-
         if(!cpu.registers.paused)
         {
             cpu.debug.ShowFPS(fps);
