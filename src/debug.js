@@ -6,6 +6,8 @@ export class Debug {
     constructor() {
         //Debug Properties
         this.opcodeLogs = new Array();
+
+        this.Active = false;
     }
 
     //Reset function

@@ -5,7 +5,7 @@ import { Settings } from "./settings.js";
 //CPU
 const speedStepText = document.getElementById('speedStep'); //Changable
 const stepCPU = document.getElementById('step');
-const pauseBtn = document.getElementById('pause')
+const pauseBtn = document.getElementById('pause');
 const quirk = document.getElementById('quirkType'); //Changable
  
 //Display
@@ -96,9 +96,6 @@ export class Controls {
         volumeLevel.innerHTML = processor.speaker.volumeLevel;
 
         oscillatorType.value = processor.speaker.wave;
-
-        console.log(processor.speaker.isMute);
-
 
         //#endregion
 
@@ -262,6 +259,7 @@ export class Controls {
         if(debugChk.checked)
         {
             debugPanel.style.display = "block"
+            processor.debug.Active = true;
         }
         else
         {

@@ -59,6 +59,9 @@ export class CPU {
 
         //Load rombuffer array into memory
         this.loadRomIntoMemory(romBuffer);
+
+        //Set pause button text
+        document.getElementById('pause').innerHTML = "Pause";
     }
 
     //Load a given romBuffer into memory
@@ -104,10 +107,6 @@ export class CPU {
             //Set draw flag to false
             this.drawFlag = false;
         }
-
-        //Debug OpCodes
-        this.debug.DebugRegisters(this);
-        this.debug.printLast();
     }
 
     //Step executes a cpu instruction and logs registers and instructions
@@ -120,6 +119,12 @@ export class CPU {
         if (this.opcode !== 0) {
             //Execute instruction sending opcode
             this.executeInstruction(this.opcode);
+
+            //If debug mode is active
+            if(this.debug.Active) {
+                // show registers
+                this.debug.DebugRegisters(this);
+            }
         }
     }
 
