@@ -1,4 +1,3 @@
-
 export class Settings {
     constructor() {
 
@@ -6,7 +5,7 @@ export class Settings {
 
     save(name, value) {
         // Check browser support
-        if (typeof (Storage) !== "undefined") {
+        if (typeof(Storage) !== "undefined") {
             // Store
             localStorage.setItem(name, value);
             console.log(`${name} ${value}`)
@@ -18,7 +17,7 @@ export class Settings {
 
     load(cpu) {
         // Check browser support
-        if (typeof (Storage) !== "undefined") {
+        if (typeof(Storage) !== "undefined") {
             //Load
             if (localStorage.length > 0) {
                 //CPU 
@@ -34,7 +33,7 @@ export class Settings {
                 // // //Sound
                 cpu.speaker.volumeLevel = localStorage.getItem("volume");
                 cpu.speaker.wave = localStorage.getItem("wave");
-                
+
                 //cpu.speaker.isMute = localStorage.getItem("mute");
             }
 

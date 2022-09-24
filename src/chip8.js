@@ -63,8 +63,7 @@ function emuCycle() {
         //Call the cpu cycle method
         //each cycle is 10 steps
         cpu.cycle();
-        if(!cpu.registers.paused)
-        {
+        if (!cpu.registers.paused) {
             cpu.debug.ShowFPS(fps);
         }
     }

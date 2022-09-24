@@ -1,6 +1,5 @@
 //Export Class
 //Used to log all debug features
-
 export class Debug {
     //Called when a new instance of the class is created
     constructor() {
@@ -22,7 +21,7 @@ export class Debug {
     printLast() {
         console.log(this.opcodeLogs[this.opcodeLogs.length - 1]);
     }
-    
+
     //Updates the Register UI
     DebugRegisters(cpu) {
         //Load Registers

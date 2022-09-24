@@ -40,8 +40,7 @@ export class Speaker {
         if (st > 0) {
             //Play
             this.enableSound();
-        }
-        else {
+        } else {
             //Stop
             this.disableSound();
         }
@@ -52,13 +51,13 @@ export class Speaker {
 //This creates the property soundEnabled for the speaker as well as creating the gain and audio context. It does not need to be exported.
 function speakerInit(speaker) {
     //Check if browser supports audio context
-    if("AudioContext" in window || "webkitAudioContext" in window) {
+    if ("AudioContext" in window || "webkitAudioContext" in window) {
         //Create audioContext and masterGain
-        const audioContext = new (AudioContext || webkitAudioContext)(); //Create an audio Context
+        const audioContext = new(AudioContext || webkitAudioContext)(); //Create an audio Context
         const masterGain = new GainNode(audioContext); //Create a masterGain GainNode
 
         //connect the masterGain to the audio context
-        masterGain.connect(audioContext.destination); 
+        masterGain.connect(audioContext.destination);
 
         //Create variables soundEnabled and Oscillator
         let soundEnabled = false;
@@ -75,7 +74,7 @@ function speakerInit(speaker) {
                 //Setter
                 set: function(value) {
                     //if incomming value already is equal to soundEnabled exit function
-                    if(value === soundEnabled) {
+                    if (value === soundEnabled) {
                         return
                     }
 
@@ -83,11 +82,13 @@ function speakerInit(speaker) {
                     soundEnabled = value;
 
                     //Check soundEnabled true
-                    if(soundEnabled) {
+                    if (soundEnabled) {
                         //Set masterGain gain value here so volume control works
                         masterGain.gain.value = speaker.volumeLevel;
                         //Start Oscillator giving it the audiocontext and the wave
-                        oscillator = new OscillatorNode(audioContext, {type: speaker.wave});
+                        oscillator = new OscillatorNode(audioContext, {
+                            type: speaker.wave
+                        });
                         //Connect the oscillator to the mastergain
                         oscillator.connect(masterGain);
                         //Start the oscillator

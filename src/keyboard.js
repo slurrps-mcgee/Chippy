@@ -20,7 +20,7 @@ export class Keyboard {
     }
 
     //check if the provided keycode is pressed(true) in the array
-    isKeyPressed(keyCode) {   
+    isKeyPressed(keyCode) {
         //Return value from keyPressed array using the provided value as an index     
         return this.keyPressed[keyCode];
     }
@@ -31,15 +31,14 @@ export class Keyboard {
         let key = this.KEYMAP[event.which];
 
         //Check that the key exists in the keymap
-        if(key != undefined)
-        {
+        if (key != undefined) {
             //Set keypressed at index key to true
             this.keyPressed[key] = true;
-    
+
             // Make sure onNextKeyPress is initialized and the pressed key is actually mapped to a Chip-8 key
             if (this.onNextKeyPress !== null && key) {
                 //parseInt the key pressed for onNextKeyPress
-                this.onNextKeyPress(parseInt(key)); 
+                this.onNextKeyPress(parseInt(key));
                 //Set onNextKeyPress to null
                 this.onNextKeyPress = null;
             }
@@ -52,8 +51,7 @@ export class Keyboard {
         let key = this.KEYMAP[event.which];
 
         //Check that the key exists in the keymap
-        if(!key != undefined)
-        {
+        if (!key != undefined) {
             //Set keypressed at index key to true
             this.keyPressed[key] = false;
         }

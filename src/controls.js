@@ -7,7 +7,7 @@ const speedStepText = document.getElementById('speedStep'); //Changable
 const stepCPU = document.getElementById('step');
 const pauseBtn = document.getElementById('pause');
 const quirk = document.getElementById('quirkType'); //Changable
- 
+
 //Display
 const displayScale = document.getElementById('displayScale'); //Changable
 
@@ -20,7 +20,7 @@ const fps = document.getElementById('fpsControl');
 const showfps = document.getElementById('showfps');
 
 //Sound
-const volumeControl = document.getElementById('volumeControl');  //Changable
+const volumeControl = document.getElementById('volumeControl'); //Changable
 const volumeLevel = document.getElementById('volumeNumber');
 const oscillatorType = document.getElementById('oscillator'); //Changable
 const muteControl = document.getElementById('sound'); //Changable
@@ -72,7 +72,7 @@ export class Controls {
         //Window
 
         //#endregion
-        
+
         this.loadControls();
     }
 
@@ -116,8 +116,7 @@ export class Controls {
             //Set register to false and change control text to Pause
             processor.registers.paused = false;
             pauseBtn.innerHTML = "Pause";
-        }
-        else {
+        } else {
             //Set register to true and change control text to Play
             processor.registers.paused = true;
             pauseBtn.innerHTML = "Play";
@@ -136,7 +135,7 @@ export class Controls {
     //This changes how many instructions per CPU cycle
     ChangeSpeed() {
         processor.speed = speedStepText.value;
-        
+
         settings.save("speed", speedStepText.value); //Save value
     }
 
@@ -152,7 +151,7 @@ export class Controls {
     //Change the scale of the display on the page
     ChangeScale() {
         processor.display.scale = displayScale.value;
-        
+
         processor.display.render();
 
         settings.save("scale", displayScale.value);
@@ -175,10 +174,9 @@ export class Controls {
     }
 
     ShowFpsCounter() {
-        if(showfps.checked) {
+        if (showfps.checked) {
             fps.style.display = "block";
-        }
-        else {
+        } else {
             fps.style.display = "none";
         }
     }
@@ -212,8 +210,7 @@ export class Controls {
             //Mute the speaker. This will set it's volume to 0
             processor.speaker.mute();
             //settings.save("mute", true);
-        }
-        else {
+        } else {
             //unmute the speaker giving it the volume control value
             processor.speaker.unMute(volumeControl.value);
             //settings.save("mute", false);
@@ -252,17 +249,13 @@ export class Controls {
     //#endregion
 
     //#region Debug
-    showDebugOptions()
-    {
+    showDebugOptions() {
         let debugPanel = document.getElementById('debugPanel');
 
-        if(debugChk.checked)
-        {
+        if (debugChk.checked) {
             debugPanel.style.display = "block"
             processor.debug.Active = true;
-        }
-        else
-        {
+        } else {
             debugPanel.style.display = "none"
         }
     }

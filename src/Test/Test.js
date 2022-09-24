@@ -7,8 +7,8 @@ export class Test {
     constructor() {
 
     }
-    
-    
+
+
     //CPU Executions
     execute(opcode) {
         //Increment the program counter for next instruction
@@ -120,8 +120,7 @@ export class Test {
                         if (this.quirk === "No Quirk") {
                             //Original CHIP 8
                             this.registers.V[x] = this.registers.V[y] >>= 1;
-                        }
-                        else {
+                        } else {
                             //Default
                             //CHIP48 and SCHIP behavior
                             this.registers.V[x] >>= 1;
@@ -216,7 +215,7 @@ export class Test {
                     case 0x0A:
                         this.registers.paused = true;
 
-                        this.keyboard.onNextKeyPress = function (key) {
+                        this.keyboard.onNextKeyPress = function(key) {
                             this.registers.V[x] = key;
                             this.registers.paused = false;
                         }.bind(this);
@@ -256,8 +255,7 @@ export class Test {
                         //Check for quirk
                         if (this.quirk === "No Quirk") {
                             this.registers.I += x + 1;
-                        }
-                        else if (this.quirk === "Shift and Load Quirk") {
+                        } else if (this.quirk === "Shift and Load Quirk") {
                             this.registers.I += x;
                         }
                         this.debug.logOpcode(`${opcode} LD [I], Vx`);
@@ -270,8 +268,7 @@ export class Test {
                         //Check for quirk
                         if (this.quirk === "No Quirk") {
                             this.registers.I += x + 1;
-                        }
-                        else if (this.quirk === "Shift and Load Qurk") {
+                        } else if (this.quirk === "Shift and Load Qurk") {
                             this.registers.I += x;
                         }
                         this.debug.logOpcode(`${opcode} LD Vx, [I]`);
@@ -287,4 +284,3 @@ export class Test {
     }
 
 }
-    
