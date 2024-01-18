@@ -26,6 +26,7 @@ const oscillatorType = document.getElementById('oscillator'); //Changable
 const muteControl = document.getElementById('sound'); //Changable
 
 //ROMS
+const fileSelect = document.getElementById('file-input');
 const romSelect = document.getElementById('roms');
 const loadBtn = document.getElementById('load');
 
@@ -239,12 +240,17 @@ export class Controls {
     //Loads a selected rom into the program
     //ToDo: Change to take in a value so that user can load their own roms
     async loadSelectedRom() {
-        //console.log(romSelect.value);
+        if(fileSelect.files[0] != undefined) {
+            processor.loadRom(fileSelect.files[0]);
+            fileSelect.value = null;
+        }
+        else {
+            let rom = await fetch(`./roms/${romSelect.value}`)
+             //Call the loadRom method from the CPU
+            await processor.loadRom(rom);
+        }
 
-        //Call the loadRom method from the CPU
-        await processor.loadRom(romSelect.value);
-        //Set the pauseBtn control text to read Pause as loading will unpause the CPU
-        //this.pauseBtn.innerHTML = "Pause";
+       
     }
     //#endregion
 

@@ -11,6 +11,8 @@ export class Keyboard {
         //keyPressed Array to size of keyboard fill with false
         this.keyPressed = new Array(NUMBER_OF_KEYS).fill(false);
 
+        this.wait = false;
+
         //onNextKeyPress to hold 
         this.onNextKeyPress = null;
 
@@ -28,17 +30,17 @@ export class Keyboard {
     //onKeyDown Event for the window
     onKeyDown(event) {
         //Get key from keymap
-        let key = this.KEYMAP[event.which];
-
+        this.key = this.KEYMAP[event.which];
         //Check that the key exists in the keymap
-        if (key != undefined) {
+        if (this.key != undefined) {
             //Set keypressed at index key to true
-            this.keyPressed[key] = true;
-
+            this.keyPressed[this.key] = true;
+            
             // Make sure onNextKeyPress is initialized and the pressed key is actually mapped to a Chip-8 key
-            if (this.onNextKeyPress !== null && key) {
+            if (this.onNextKeyPress !== null && this.key) {
                 //parseInt the key pressed for onNextKeyPress
-                this.onNextKeyPress(parseInt(key));
+                this.onNextKeyPress(parseInt(this.key));
+                this.wait = true;
                 //Set onNextKeyPress to null
                 this.onNextKeyPress = null;
             }
@@ -48,12 +50,12 @@ export class Keyboard {
     //onKeyUp Event for the window
     onKeyUp(event) {
         //Get key from keymap
-        let key = this.KEYMAP[event.which];
-
+        this.key = this.KEYMAP[event.which];
         //Check that the key exists in the keymap
-        if (!key != undefined) {
+        if (this.key != undefined) {
             //Set keypressed at index key to true
-            this.keyPressed[key] = false;
+            this.keyPressed[this.key] = false;
+            this.wait = false;
         }
     }
 }

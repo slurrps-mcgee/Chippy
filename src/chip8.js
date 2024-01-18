@@ -41,7 +41,7 @@ function emuCycle() {
     //Framerate Calculations
     now = Date.now();
     delta = now - then;
-    var fps = Math.round(1 / timePassed);
+    //var fps = Math.round(1 / timePassed);
 
     //This will force 60Hz
     if (delta > TIME_60_HZ) {
@@ -63,9 +63,6 @@ function emuCycle() {
         //Call the cpu cycle method
         //each cycle is 10 steps
         cpu.cycle();
-        if (!cpu.registers.paused) {
-            cpu.debug.ShowFPS(fps);
-        }
     }
 
     //Recursion

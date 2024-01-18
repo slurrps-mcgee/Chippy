@@ -33,6 +33,10 @@ export class Registers {
         this.paused = false;
     }
 
+    nextInstruction() {
+        this.PC += 2;
+    }
+
     //Push new value to stack
     stackPush(value) {
         //Increase the Stack Position
