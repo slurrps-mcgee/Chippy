@@ -219,7 +219,6 @@ export class CPU {
                 this.registers.V[0xF] = vf;
                 break;
             //8XY6
-            //Possible carry issue according to test
             case 'SHR_VX_VY':
                 //Check for quirk
                 // if (this.quirk === "shift") {
@@ -229,9 +228,9 @@ export class CPU {
                 //}    
 
                 //Set Vf to least significant bit and set Vx to Vy shifted right 1 bit
-                this.registers.V[0xF] = this.registers.V[args[1]] & 1;
+                var vf = this.registers.V[args[1]] & 1;
                 this.registers.V[args[0]]  = this.registers.V[args[1]] >>= 1;
-
+                this.registers.V[0xF] = vf;
                 break;
             //8XY7
             case 'SUBN_VX_VY':
@@ -240,7 +239,6 @@ export class CPU {
                 this.registers.V[0xF] = vf;
                 break;
             //8XYE
-            //Possible carry issue according to test
             case 'SHL_VX_VY':
                 //Check for quirk
                 // if (this.quirk === "shift") {
@@ -250,8 +248,9 @@ export class CPU {
                 //} 
 
                 //Set Vf to most significant bit and then set Vx to Vy shifted left 1 bit
-                this.registers.V[0xF] = this.registers.V[args[1]] >> 7;
+                var vf = this.registers.V[args[1]] >> 7;
                 this.registers.V[args[0]] = this.registers.V[args[1]] <<= 1;
+                this.registers.V[0xF] = vf;
                 break;
             //9XY0
             case 'SNE_VX_VY':
