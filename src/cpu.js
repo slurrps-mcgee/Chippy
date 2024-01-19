@@ -1,7 +1,7 @@
 //This is the CPU which interacts with the rest of the hardware. It's main task is to performe a CPU Cycle measured in steps per cycle
 //Each Cycle will run  10 steps taking in OPCodes and executing them.
 import { SPRITE_WIDTH } from "./Constants/CharSet.js";
-import { STEP_SPEED } from "./Constants/CPUConstants.js";
+import { CHIP8_SPEED } from "./Constants/CPUConstants.js";
 import { LOAD_PROGRAM_ADDRESS, MEMORY_SIZE } from "./Constants/MemoryConstants.js";
 import { Memory } from "./memory.js"
 import { Registers } from "./registers.js";
@@ -15,25 +15,22 @@ export class CPU {
         this.display = display;
         this.keyboard = keyboard;
         this.speaker = speaker;
-
-        //CPU Memory
         this.memory = new Memory();
-        //CPU Registers
         this.registers = new Registers();
-
-        //Instruction Speed
-        this.speed = STEP_SPEED;
-        //Handles Shift Quirk for Variations of Chip 8
-        //this.quirk = "Shift and Load Qurk";
-        //Holds the current OpCode Instruction
-
-        this.opcode
-        //Opcode Disassembler
         this.disassember = new Disassembler();
 
-        this.drawFlag = false;
+        //this.debug = new Debug();
 
-        this.debug = new Debug();
+        //Variables
+        this.speed = CHIP8_SPEED;
+        //Quirks
+        this.noquirk = true;
+        this.shiftquirk = false;
+        this.loadquirk = false;
+        //Opcode
+        this.opcode
+        //DrawFlag
+        this.drawFlag = false;
     }
 
     //Resets the CPU
@@ -43,7 +40,7 @@ export class CPU {
         this.registers.reset();
         this.display.reset();
 
-        this.debug.reset();
+        //this.debug.reset();
     }
 
     ///Loads a selected rom into an arrayBuffer then calls loadRomIntoMemory
@@ -75,17 +72,15 @@ export class CPU {
     //CPU Cycle
     //One CPU Cycle
     cycle() {
-        //Since this will execute a batch of instructions based on speed will need to have the pause check inside
         for (let i = 0; i < this.speed; i++) {
             //Check if paused
-            //Used for programs that check for pause and await input like connect4 and tictac
-            //Execute an instruction step
             if(!this.registers.paused) {
+                //Execute an instruction step
                 this.step();
             }
         }
 
-        //Check if paused
+        //Update timers
         this.registers.updateTimers();
 
         //Call play sound
@@ -100,7 +95,6 @@ export class CPU {
         }
     }
 
-    //Step executes a cpu instruction and logs registers and instructions
     //One Chip8 Instruction
     step() {
         //Get opcode from memory. Opcode is two bytes
@@ -111,17 +105,12 @@ export class CPU {
             //Execute instruction sending opcode
             this.executeInstruction(this.opcode);
 
-            //If debug mode is active
-            if (this.debug.Active) {
-                // show registers
-                this.debug.DebugRegisters(this);
-            }
+            // //If debug mode is active
+            // if (this.debug.Active) {
+            //     // show registers
+            //     this.debug.DebugRegisters(this);
+            // }
         }
-
-        // if(!this.keyboard.wait) {
-            
-        // }
-        
     }
 
     //Using Disassembler
@@ -141,7 +130,7 @@ export class CPU {
 
 
         //To hex or not to hex?
-        this.debug.logOpcode(`${instruction.id}: 0x${opcode.toString(16)}`)
+        //this.debug.logOpcode(`${instruction.id}: 0x${opcode.toString(16)}`)
 
         //Details on each instruction can be found inside the Constants/InstructinoSet.js file
         //This includes name, mask, pattern, and arguments
@@ -318,7 +307,6 @@ export class CPU {
             //Need to inquire how to properly stop and wait execution for keypress and release
             case 'LD_VX_K':
                 this.registers.paused = true;
-                
                 this.keyboard.onNextKeyPress = function(key) {
                     this.registers.V[args[0]] = key;
                     this.registers.paused = false;

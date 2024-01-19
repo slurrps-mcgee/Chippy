@@ -1,11 +1,11 @@
-//Export Constants
-export const MASK_NNN = { mask: 0x0fff }; //NNN
-export const MASK_N = { mask: 0x000f }; //Nibble
-export const MASK_X = { mask: 0x0f00, shift: 8 }; //X
-export const MASK_Y = { mask: 0x00f0, shift: 4 }; //Y
-export const MASK_KK = { mask: 0x00ff }; //KK
-export const MASK_HIGHEST_BYTE = 0xf000; //High byte
-export const MASK_HIGHEST_AND_LOWEST_BYTE = 0xf00f; //High and Low byte
+//Constants
+const MASK_NNN = { mask: 0x0fff }; //NNN
+const MASK_N = { mask: 0x000f }; //Nibble
+const MASK_X = { mask: 0x0f00, shift: 8 }; //X
+const MASK_Y = { mask: 0x00f0, shift: 4 }; //Y
+const MASK_KK = { mask: 0x00ff }; //KK
+const MASK_HIGHEST_BYTE = 0xf000; //High byte
+const MASK_HIGHEST_AND_LOWEST_BYTE = 0xf00f; //High and Low byte
 //Instruction Set Array
 export const INSTRUCTION_SET = [
 
@@ -393,10 +393,7 @@ export const INSTRUCTION_SET = [
     arguments: [MASK_X],
   },
 
-
-
   //Chip48 Instructions
-
   {
     key: 36,
     id: 'SCD nibble',

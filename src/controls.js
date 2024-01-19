@@ -84,7 +84,7 @@ export class Controls {
         //#region Controls Values Load
         //CPU
         speedStepText.value = processor.speed;
-        quirk.value = processor.quirk;
+        // quirk.value = processor.quirk;
 
         //Display
         displayScale.value = processor.display.scale;
@@ -142,9 +142,9 @@ export class Controls {
 
     //Turns on or off cpu quirk which handles different types of chip8 cpus
     setQuirk() {
-        processor.quirk = quirk.value;
+        // processor.quirk = quirk.value;
 
-        settings.save("quirk", quirk.value); //Save value
+        // settings.save("quirk", quirk.value); //Save value
     }
     //#endregion
 
