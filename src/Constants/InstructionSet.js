@@ -6,6 +6,7 @@ const MASK_Y = { mask: 0x00f0, shift: 4 }; //Y
 const MASK_KK = { mask: 0x00ff }; //KK
 const MASK_HIGHEST_BYTE = 0xf000; //High byte
 const MASK_HIGHEST_AND_LOWEST_BYTE = 0xf00f; //High and Low byte
+
 //Instruction Set Array
 export const INSTRUCTION_SET = [
 

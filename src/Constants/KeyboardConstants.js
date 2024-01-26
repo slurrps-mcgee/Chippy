@@ -1,5 +1,5 @@
-//Export Constants
-export const NUMBER_OF_KEYS = 16; //Number of keys in the keypad
+//Number of keys on keypad
+export const NUMBER_OF_KEYS = 16;
 
 //Keymap of the keyboard
 export const KEYMAP = {
