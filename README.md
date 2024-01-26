@@ -5,6 +5,8 @@ A Chip-8 Emulator written in javascript
 
 ![Main Window](./images/Display.png)
 
+Special Thanks to [Timendus](https://github.com/Timendus) for his Chip8 Test Suite
+
 # Features
 * Display Controls
 * CPU Controls
