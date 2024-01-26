@@ -16,15 +16,12 @@ Special Thanks to [Timendus](https://github.com/Timendus) for his Chip8 Test Sui
 # Debug Features
 * Register Display
 
-# Features TODO
+# Features TODO List
 * Implement instruction log to the left
 * Hex Dump
 * Save State
 * Anti Flickering
 * Virtual Keypad
-
-# Bugs
-* sound issue that pops up with blinky sometimes when hitting a wall
 
 ### KEYMAP
 KEYPAD - KEYBOARD
