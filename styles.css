@@ -17,7 +17,7 @@ html, body {
 }
 
 #keypad {
-    display: none !important;
+    display: none;
 }
 
 .registers {
@@ -92,8 +92,5 @@ html, body {
 @media(max-width: 576px) {
     canvas {
         width: 100%;
-    }
-    #keypad {
-        display: flex !important;
     }
 }

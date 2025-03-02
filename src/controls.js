@@ -36,6 +36,7 @@ export class Controls {
 
         // Debug Controls
         this.addEvent('click', 'debug', this.toggleDebugOptions);
+        this.addEvent('click', 'keypadCheck', this.toggleKeyboard);
         //#endregion
     }
 
@@ -167,5 +168,11 @@ export class Controls {
         const isDebugActive = document.getElementById('debug').checked;
         debugPanel.style.display = isDebugActive ? "block" : "none";
         processor.debug.Active = isDebugActive;
+    }
+
+    toggleKeyboard() {
+        const keypad = document.getElementById('keypad');
+        const isKeypadActive = document.getElementById('keypadCheck').checked;
+        keypad.style.display = isKeypadActive ? "block" : "none";
     }
 }

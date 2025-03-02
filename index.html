@@ -131,40 +131,15 @@
         </div>
     </section>
 
-    <!--Virtual keypad for mobile should be placed here-->
-    <section>
-        <div class="container">
-            <div id="keypad" class="d-flex flex-wrap justify-content-center mt-5">
-                <!-- Row 1 -->
-                <button class="btn btn-dark m-2 p-4" id="key1">1</button>
-                <button class="btn btn-dark m-2 p-4" id="key2">2</button>
-                <button class="btn btn-dark m-2 p-4" id="key3">3</button>
-                <button class="btn btn-dark m-2 p-4" id="keyC">C</button>
-                
-                <!-- Row 2 -->
-                <button class="btn btn-dark m-2 p-4" id="key4">4</button>
-                <button class="btn btn-dark m-2 p-4" id="key5">5</button>
-                <button class="btn btn-dark m-2 p-4" id="key6">6</button>
-                <button class="btn btn-dark m-2 p-4" id="keyD">D</button>
-                
-                <!-- Row 3 -->
-                <button class="btn btn-dark m-2 p-4" id="key7">7</button>
-                <button class="btn btn-dark m-2 p-4" id="key8">8</button>
-                <button class="btn btn-dark m-2 p-4" id="key9">9</button>
-                <button class="btn btn-dark m-2 p-4" id="keyE">E</button>
-                
-                <!-- Row 4 -->
-                <button class="btn btn-dark m-2 p-4" id="keyA">A</button>
-                <button class="btn btn-dark m-2 p-4" id="key0">0</button>
-                <button class="btn btn-dark m-2 p-4" id="keyB">B</button>
-                <button class="btn btn-dark m-2 p-4" id="keyF">F</button>
-            </div>
-        </div>
-    </section>
-
     <!--Settings Panel-->
     <section>
         <div class="container d-flex justify-content-center align-items-center">
+            <div class="m-4">
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label text-white" for="keyboard">Keypad</label>
+                    <input class="form-check-input" type="checkbox" value="" id="keypadCheck">
+                </div>
+            </div>
             <div class="m-4">
                 <div class="form-check form-check-inline">
                     <label class="form-check-label text-white" for="debug">Debug</label>
@@ -175,6 +150,76 @@
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
                     data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true" title="Open Settings"><i
                         class="bi bi-sliders"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!--Virtual keypad for mobile should be placed here-->
+    <section>
+        <div class="container">
+            <div id="keypad">
+                <div class="row row-cols-4 g-2 justify-content-center">
+                    <!-- Row 1 -->
+                    <div class="col-md-1 col-sm-2">
+                        <button class="btn btn-dark m-2 p-4" id="key1">1</button>
+                    </div>
+                    <div class="col-md-1 col-sm-2">
+                        <button class="btn btn-dark m-2 p-4" id="key2">2</button>
+                    </div>
+                    <div class="col-md-1 col-sm-2">
+                        <button class="btn btn-dark m-2 p-4" id="key3">3</button>
+                    </div>
+                    <div class="col-md-1 col-sm-2">
+                        <button class="btn btn-dark m-2 p-4" id="keyC">C</button>
+                    </div>
+                </div>
+
+                <div class="row row-cols-4 g-2 justify-content-center">
+                    <!-- Row 2 -->
+                    <div class="col-md-1 col-sm-2">
+                        <button class="btn btn-dark m-2 p-4" id="key4">4</button>
+                    </div>
+                    <div class="col-md-1 col-sm-2">
+                        <button class="btn btn-dark m-2 p-4" id="key5">5</button>
+                    </div>
+                    <div class="col-md-1 col-sm-2">
+                        <button class="btn btn-dark m-2 p-4" id="key6">6</button>
+                    </div>
+                    <div class="col-md-1 col-sm-2">
+                        <button class="btn btn-dark m-2 p-4" id="keyD">D</button>
+                    </div>
+                </div>
+                <div class="row row-cols-4 g-2 justify-content-center">
+                    <!-- Row 3 -->
+                    <div class="col-md-1 col-sm-2">
+                        <button class="btn btn-dark m-2 p-4" id="key7">7</button>
+                    </div>
+                    <div class="col-md-1 col-sm-2">
+                        <button class="btn btn-dark m-2 p-4" id="key8">8</button>
+                    </div>
+                    <div class="col-md-1 col-sm-2">
+                        <button class="btn btn-dark m-2 p-4" id="key9">9</button>
+                    </div>
+                    <div class="col-md-1 col-sm-2">
+                        <button class="btn btn-dark m-2 p-4" id="keyE">E</button>
+                    </div>
+                </div>
+                <div class="row row-cols-4 g-2 justify-content-center">
+                    <!-- Row 4 -->
+                    <div class="col-md-1 col-sm-2">
+                        <button class="btn btn-dark m-2 p-4" id="keyA">A</button>
+                    </div>
+                    <div class="col-md-1 col-sm-2">
+                        <button class="btn btn-dark m-2 p-4" id="key0">0</button>
+                    </div>
+                    <div class="col-md-1 col-sm-2">
+                        <button class="btn btn-dark m-2 p-4" id="keyB">B</button>
+                    </div>
+                    <div class="col-md-1 col-sm-2">
+                        <button class="btn btn-dark m-2 p-4" id="keyF">F</button>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
@@ -197,8 +242,8 @@
                             <select class="form-select" id="roms"></select>
                         </div>
 
-                        
-                        <input id="file-input" type="file"/>
+
+                        <input id="file-input" type="file" />
                     </div>
                 </div>
             </div>
