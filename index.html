@@ -24,7 +24,7 @@
         <div class="text-center text-white">
             <h1><b>Welcome to Chippy!</b></h1>
             <!--Add FPS-->
-            <h3 id="fpsControl">FPS: <span id="fpsCounter"></span></h3>
+            <!-- <h3 id="fpsControl">FPS: <span id="fpsCounter"></span></h3> -->
         </div>
     </section>
 
@@ -132,7 +132,35 @@
     </section>
 
     <!--Virtual keypad for mobile should be placed here-->
-
+    <section>
+        <div class="container">
+            <div id="keypad" class="d-flex flex-wrap justify-content-center mt-5">
+                <!-- Row 1 -->
+                <button class="btn btn-dark m-2 p-4" id="key1">1</button>
+                <button class="btn btn-dark m-2 p-4" id="key2">2</button>
+                <button class="btn btn-dark m-2 p-4" id="key3">3</button>
+                <button class="btn btn-dark m-2 p-4" id="keyC">C</button>
+                
+                <!-- Row 2 -->
+                <button class="btn btn-dark m-2 p-4" id="key4">4</button>
+                <button class="btn btn-dark m-2 p-4" id="key5">5</button>
+                <button class="btn btn-dark m-2 p-4" id="key6">6</button>
+                <button class="btn btn-dark m-2 p-4" id="keyD">D</button>
+                
+                <!-- Row 3 -->
+                <button class="btn btn-dark m-2 p-4" id="key7">7</button>
+                <button class="btn btn-dark m-2 p-4" id="key8">8</button>
+                <button class="btn btn-dark m-2 p-4" id="key9">9</button>
+                <button class="btn btn-dark m-2 p-4" id="keyE">E</button>
+                
+                <!-- Row 4 -->
+                <button class="btn btn-dark m-2 p-4" id="keyA">A</button>
+                <button class="btn btn-dark m-2 p-4" id="key0">0</button>
+                <button class="btn btn-dark m-2 p-4" id="keyB">B</button>
+                <button class="btn btn-dark m-2 p-4" id="keyF">F</button>
+            </div>
+        </div>
+    </section>
 
     <!--Settings Panel-->
     <section>
@@ -156,7 +184,7 @@
         <div class="row gy-4">
             <!--Rom Selection-->
             <div class="col-sm d-flex justify-content-center">
-                <div class="card text-center w-100" style="min-width: 18rem;">
+                <div class="card text-center w-100 overflow-hidden" style="min-width: 18rem;">
                     <h5 class="card-header">Rom Selection</h5>
                     <div class="card-body">
 
@@ -169,10 +197,8 @@
                             <select class="form-select" id="roms"></select>
                         </div>
 
-                        <!-- <button disabled class="btn btn-primary btn-block w-100" id="load" type="button" value="load"
-                            data-bs-toggle="tooltip" data-bs-placement="left" data-bs-animation="true"
-                            title="Loads a selected rom from file">Select File</button> -->
-                            <input id="file-input" type="file"/>
+                        
+                        <input id="file-input" type="file"/>
                     </div>
                 </div>
             </div>
@@ -197,7 +223,7 @@
                                 title="Handles the instructions per cpu cycle" />
                         </div>
                         <div class="m-4">
-                            <h6>Instruction Quirks</h6>
+                            <h6>Instruction Quirks (Not Currently Implemented)</h6>
                         </div>
                         <div class="m-4">
                             <select class="form-select" id="quirkType" data-bs-toggle="tooltip" data-bs-placement="left"
@@ -218,6 +244,7 @@
                     <h5 class="card-header">Rom Instructions</h5>
                     <div class="card-body">
                         <!--Rom Instructions for selected rom that is loaded-->
+                        Rom Instructions will be here for the included list currently under construction
                     </div>
                 </div>
             </div>
@@ -334,7 +361,6 @@
                 </div>
             </div>
         </div>
-
     </section>
 
     <!--Modal-->
@@ -343,7 +369,7 @@
         <div class="modal-dialog">
             <div class="modal-content color-granite-gray">
                 <div class="modal-header">
-                    <h3 class="modal-title text-white" id="exampleModalLabel"><b>Settings</b></h3>
+                    <h3 class="modal-title text-white w-100 text-center" id="exampleModalLabel"><b>Settings</b></h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-5">
@@ -424,6 +450,7 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
     <script type="module" src="src/chip8.js"></script>
+
 </body>
 
 </html>

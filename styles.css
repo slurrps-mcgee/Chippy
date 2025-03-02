@@ -2,6 +2,11 @@
     font-family: 'Press Start 2P', 'Helvetica', 'Arial', sans-serif;
 }
 
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
 #fpsControl {
     font-weight: 600;
     display: none;
@@ -9,6 +14,10 @@
 
 #debugPanel {
     display: none;
+}
+
+#keypad {
+    display: none !important;
 }
 
 .registers {
@@ -84,6 +93,7 @@
     canvas {
         width: 100%;
     }
-
-
+    #keypad {
+        display: flex !important;
+    }
 }

@@ -20,3 +20,22 @@ export const KEYMAP = {
     67: 0xB, // C
     86: 0xF  // V
 }
+
+export const DigitalKeyMapping = {
+    'key1': 49, 
+    'key2': 50, 
+    'key3': 51, 
+    'keyC': 52,
+    'key4': 81, 
+    'key5': 87, 
+    'key6': 69, 
+    'keyD': 82,
+    'key7': 65, 
+    'key8': 83, 
+    'key9': 68, 
+    'keyE': 70,
+    'keyA': 90, 
+    'key0': 88, 
+    'keyB': 67, 
+    'keyF': 86
+};

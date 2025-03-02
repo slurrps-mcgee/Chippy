@@ -94,7 +94,6 @@ export class CPU {
         if (this.opcode !== 0) {
             // Execute instruction with opcode
             this.executeInstruction(this.opcode);
-            this.debug.DebugRegisters(this);
         }
     }
 
@@ -115,7 +114,11 @@ export class CPU {
 
 
         //To hex or not to hex?
-        //this.debug.logOpcode(`${instruction.id}: 0x${opcode.toString(16)}`)
+        if(this.debug.Active)
+        {
+            this.debug.DebugRegisters(this);
+            this.debug.logOpcode(`${instruction.id}: 0x${opcode.toString(16)}`)
+        }
 
         //Details on each instruction can be found inside the Constants/InstructinoSet.js file
         //This includes name, mask, pattern, and arguments

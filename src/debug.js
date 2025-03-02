@@ -16,6 +16,7 @@ export class Debug {
 
     logOpcode(msg) {
         this.opcodeLogs.push(msg);
+        this.printLast();
     }
 
     printLast() {
