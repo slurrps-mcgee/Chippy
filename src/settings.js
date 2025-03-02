@@ -1,46 +1,37 @@
 export class Settings {
-    constructor() {
-
-    }
-
-    save(name, value) {
-        // Check browser support
-        if (typeof(Storage) !== "undefined") {
-            // Store
-            localStorage.setItem(name, value);
-            console.log(`${name} ${value}`)
-
-        } else {
-            alert("Sorry, your browser does not support Web Storage...");
+    save(key, value) {
+        try {
+            localStorage.setItem(key, JSON.stringify(value));
+            console.log(`Saved: ${key} = ${value}`);
+        } catch (error) {
+            console.error("Failed to save settings:", error);
         }
     }
 
     load(cpu) {
-        // Check browser support
-        if (typeof(Storage) !== "undefined") {
-            //Load
-            if (localStorage.length > 0) {
-                //CPU 
-                cpu.speed = localStorage.getItem("speed");
-                cpu.quirk = localStorage.getItem("quirk");
+        try {
+            if (localStorage.length === 0) return;
 
-                //Display
-                cpu.display.scale = localStorage.getItem("scale");
-                cpu.display.bgColor = localStorage.getItem("bgColor");
-                cpu.display.color = localStorage.getItem("color");
+            // Load CPU settings
+            cpu.speed = this.get("speed", cpu.speed);
+            cpu.quirk = this.get("quirk", cpu.quirk);
 
-                //Sound
-                cpu.speaker.volumeLevel = localStorage.getItem("volume");
-                cpu.speaker.wave = localStorage.getItem("wave");
-                //cpu.speaker.isMute = localStorage.getItem("mute");
+            // Load Display settings
+            cpu.display.scale = this.get("scale", cpu.display.scale);
+            cpu.display.bgColor = this.get("bgColor", cpu.display.bgColor);
+            cpu.display.color = this.get("color", cpu.display.color);
 
-                //Quirks
+            // Load Sound settings
+            cpu.speaker.volumeLevel = this.get("volume", cpu.speaker.volumeLevel);
+            cpu.speaker.wave = this.get("wave", cpu.speaker.wave);
 
-            }
-
-
-        } else {
-            alert("Sorry, your browser does not support Web Storage...");
+        } catch (error) {
+            console.error("Failed to load settings:", error);
         }
+    }
+
+    get(key, defaultValue) {
+        const value = localStorage.getItem(key);
+        return value !== null ? JSON.parse(value) : defaultValue;
     }
 }

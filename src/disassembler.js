@@ -1,35 +1,30 @@
-//Imports
+// Imports
 import { INSTRUCTION_SET } from './Constants/InstructionSet.js';
 
-//Export class
+// Export class
 export class Disassembler {
-
-  //Disassemble a given opcode
+  // Disassemble a given opcode
   disassemble(opcode) {
     try {
-        //Constants
-        //instruction set to found instruction from the InstructionSet
-        const instruction = INSTRUCTION_SET.find(
-        //opcode & bitwise instruction.mask === instruction.pattern
-        (instruction) => (opcode & instruction.mask) === instruction.pattern
-        );
-        //args = instruction.argurments
-        const args = instruction.arguments.map(
-        //opcode & arg.mask >> arg.shift
+      // Find the instruction that matches the given opcode
+      const instruction = INSTRUCTION_SET.find(
+        (instr) => (opcode & instr.mask) === instr.pattern
+      );
+
+      if (!instruction) {
+        console.error(`Opcode not found: 0x${opcode.toString(16)}`);
+        return { instruction: null, args: [] };
+      }
+
+      // Extract arguments based on the instruction's argument masks and shifts
+      const args = instruction.arguments.map(
         (arg) => (opcode & arg.mask) >> arg.shift
-        );
-        //Return instruction, args
-        return {
-            instruction,
-            args
-        };
+      );
+
+      return { instruction, args };
+    } catch (error) {
+      console.error(`Error disassembling opcode: 0x${opcode.toString(16)}`, error);
+      return { instruction: null, args: [] };
     }
-    catch {
-        console.log(`opcode not found ${opcode}`)
-        return {
-            instruction: null,
-            args: null
-        }
-    }      
   }
 }

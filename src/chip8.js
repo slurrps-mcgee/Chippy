@@ -6,70 +6,36 @@ import { Keyboard } from "./keyboard.js";
 import { Controls } from "./controls.js";
 import { Speaker } from "./speaker.js";
 
-//#region Initialize
-//Create new instances of the hardware
+//#region Initialize hardware
 const display = new Display();
 const keyboard = new Keyboard();
 const speaker = new Speaker();
-
-//Attatch the hardware to a new instance of the CPU
-const cpu = new CPU(display, keyboard, speaker);
+const cpu = new CPU(display, keyboard, speaker); // Attaching hardware to CPU
+const controls = new Controls(cpu); // Loads controls
 //#endregion
 
-//Loads the pages controls and handles their events
-const controls = new Controls(cpu);
-
-
-//Variables for calculating FPS
-var now, then, delta;
+// Variables for FPS calculation
+let now, then, delta;
 
 function init() {
-    //#region Start Emulator
-    //Get Start
-    then = Date.now();
-
-    //Call the loop
-    //Infinite Function
-    emuCycle();
-    //#endregion
+    then = Date.now(); // Start time
+    emuCycle(); // Start the emulator cycle
 }
 
-//#region EmuCycle
-//This should run at 60Hz but can be changed by fps counter
 function emuCycle() {
-    var timePassed = (Date.now() - now) / 1000;
-    //Framerate Calculations
     now = Date.now();
     delta = now - then;
-    //var fps = Math.round(1 / timePassed);
+    const timePassed = delta / 1000; // Calculate time passed in seconds
 
-    //This will force 60Hz
+    // Limit emulation to 60Hz
     if (delta > TIME_60_HZ) {
-        //Contextual Comments from https://gist.github.com/elundmark
-        // update time stuffs
-        // Just `then = now` is not enough.
-        // Lets say we set fps at 10 which means
-        // each frame must take 100ms
-        // Now frame executes in 16ms (60fps) so
-        // the loop iterates 7 times (16*7 = 112ms) until
-        // delta > interval === true
-        // Eventually this lowers down the FPS as
-        // 112*10 = 1120ms (NOT 1000ms).
-        // So we have to get rid of that extra 12ms
-        // by subtracting delta (112) % interval (100).
-        // Hope that makes sense.
+        // Adjust for 60Hz FPS, accounting for potential frame drops
         then = now - (delta % TIME_60_HZ);
-
-        //Call the cpu cycle method
-        //each cycle is 10 steps
-        cpu.cycle();
+        cpu.cycle(); // Execute CPU cycle
     }
 
-    //Recursion
-    requestAnimationFrame(emuCycle);
+    requestAnimationFrame(emuCycle); // Recursively call to create the loop
 }
 
-//#endregion
-
-//Call Initialization Function
+// Call Initialization Function
 init();

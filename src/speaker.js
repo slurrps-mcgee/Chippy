@@ -1,104 +1,82 @@
-//Class to be exported to other classes
+// Class to be exported to other classes
 export class Speaker {
-    //Called when creating an instance of the class
+    // Called when creating an instance of the class
     constructor() {
-        //Speaker properties
+        // Speaker properties
         this.isMute = false;
-        this.soundEnabled = false; //Holds whether the sound is enabled or not. Object defined in speaker init function
-        this.volumeLevel = 0.3; //Holds the volume level of the speaker
-        this.wave = "square"; //Holds the wave of the oscillator
+        this.soundEnabled = false; // Holds whether the sound is enabled or not
+        this.volumeLevel = 0.3; // Holds the volume level of the speaker
+        this.wave = "square"; // Holds the wave of the oscillator
+        this.audioContext = null; // Placeholder for audio context
+        this.masterGain = null;
+        this.oscillator = null;
 
-        //Initialize speaker
-        speakerInit(this);
+        // Initialize speaker (but delay audioContext creation)
+        this.initSpeaker();
     }
 
-    //Funtions
-    //Enables the sound Card
-    enableSound() {
-        this.soundEnabled = true;
-    }
-
-    //Disables the sound Card
-    disableSound() {
-        this.soundEnabled = false;
-    }
-
-    //User Controlled
-    mute() {
-        //Set audio level to 0
-        this.volumeLevel = 0.0;
-    }
-
-    unMute(value) {
-        //Set audio level to incoming value
-        //This will help when volume has been changed while the speaker is muted
-        this.volumeLevel = value;
-    }
-
-    //Play Sound based on sound timer value
-    playSound(st) {
-        if (st > 0) {
-            //Play
-            this.enableSound();
-        } else {
-            //Stop
-            this.disableSound();
+    // Initialize function
+    initSpeaker() {
+        if ("AudioContext" in window || "webkitAudioContext" in window) {
+            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            this.masterGain = this.audioContext.createGain();
+            this.masterGain.connect(this.audioContext.destination);
         }
     }
-}
 
-//Initialization function
-//This creates the property soundEnabled for the speaker as well as creating the gain and audio context. It does not need to be exported.
-function speakerInit(speaker) {
-    //Check if browser supports audio context
-    if ("AudioContext" in window || "webkitAudioContext" in window) {
-        //Create audioContext and masterGain
-        const audioContext = new(AudioContext || webkitAudioContext)(); //Create an audio Context
-        const masterGain = new GainNode(audioContext); //Create a masterGain GainNode
+    // Ensures audioContext is resumed before playback
+    async ensureAudioContext() {
+        if (this.audioContext && this.audioContext.state === "suspended") {
+            await this.audioContext.resume();
+        }
+    }
 
-        //connect the masterGain to the audio context
-        masterGain.connect(audioContext.destination);
+    // Enables the sound
+    async enableSound() {
+        await this.ensureAudioContext();
+        if (!this.soundEnabled) {
+            this.soundEnabled = true;
+            this.masterGain.gain.value = this.volumeLevel;
+            this.oscillator = new OscillatorNode(this.audioContext, {
+                type: this.wave
+            });
+            this.oscillator.connect(this.masterGain);
+            this.oscillator.start();
+        }
+    }
 
-        //Create variables soundEnabled and Oscillator
-        let soundEnabled = false;
-        let oscillator;
+    // Disables the sound
+    disableSound() {
+        if (this.soundEnabled && this.oscillator) {
+            this.oscillator.stop();
+            this.oscillator.disconnect();
+            this.oscillator = null;
+            this.soundEnabled = false;
+        }
+    }
 
-        //Create an object and define its properties to speaker
-        Object.defineProperties(speaker, {
-            //Sound Enabled Property
-            soundEnabled: {
-                //Getter
-                get: function() {
-                    return soundEnabled;
-                },
-                //Setter
-                set: function(value) {
-                    //if incomming value already is equal to soundEnabled exit function
-                    if (value === soundEnabled) {
-                        return
-                    }
+    // Mute function
+    mute() {
+        this.volumeLevel = 0.0;
+        if (this.masterGain) {
+            this.masterGain.gain.value = 0;
+        }
+    }
 
-                    //Set soundEnabled to incoming value
-                    soundEnabled = value;
+    // Unmute function
+    unMute(value) {
+        this.volumeLevel = value;
+        if (this.masterGain) {
+            this.masterGain.gain.value = value;
+        }
+    }
 
-                    //Check soundEnabled true
-                    if (soundEnabled) {
-                        //Set masterGain gain value here so volume control works
-                        masterGain.gain.value = speaker.volumeLevel;
-                        //Start Oscillator giving it the audiocontext and the wave
-                        oscillator = new OscillatorNode(audioContext, {
-                            type: speaker.wave
-                        });
-                        //Connect the oscillator to the mastergain
-                        oscillator.connect(masterGain);
-                        //Start the oscillator
-                        oscillator.start();
-                    } else {
-                        //Stop the Oscillator
-                        oscillator.stop();
-                    }
-                }
-            }
-        })
+    // Play sound based on a timer value
+    async playSound(st) {
+        if (st > 0) {
+            await this.enableSound();
+        } else {
+            this.disableSound();
+        }
     }
 }

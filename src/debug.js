@@ -4,14 +4,14 @@ export class Debug {
     //Called when a new instance of the class is created
     constructor() {
         //Debug Properties
-        this.opcodeLogs = new Array();
+        this.opcodeLogs = [];
 
         this.Active = false;
     }
 
     //Reset function
     reset() {
-        this.opcodeLogs.fill(0);
+        this.opcodeLogs = [];
     }
 
     logOpcode(msg) {

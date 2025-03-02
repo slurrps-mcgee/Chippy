@@ -1,9 +1,7 @@
-//This is the CPU which interacts with the rest of the hardware. It's main task is to performe a CPU Cycle measured in steps per cycle
-//Each Cycle will run  10 steps taking in OPCodes and executing them.
 import { SPRITE_WIDTH } from "./Constants/CharSet.js";
 import { CHIP8_SPEED } from "./Constants/CPUConstants.js";
 import { LOAD_PROGRAM_ADDRESS, MEMORY_SIZE } from "./Constants/MemoryConstants.js";
-import { Memory } from "./memory.js"
+import { Memory } from "./memory.js";
 import { Registers } from "./registers.js";
 import { Debug } from "./debug.js";
 import { Disassembler } from './disassembler.js';
@@ -11,122 +9,109 @@ import { Disassembler } from './disassembler.js';
 
 export class CPU {
     constructor(display, keyboard, speaker) {
-        //Hardware
+        // Hardware
         this.display = display;
         this.keyboard = keyboard;
         this.speaker = speaker;
         this.memory = new Memory();
         this.registers = new Registers();
-        this.disassember = new Disassembler();
+        this.disassembler = new Disassembler();
 
-        //this.debug = new Debug();
-
-        //Variables
+        // Variables
         this.speed = CHIP8_SPEED;
-        //Quirks
+
+        // Quirks
         this.noquirk = true;
         this.shiftquirk = false;
         this.loadquirk = false;
-        //Opcode
-        this.opcode
-        //DrawFlag
+
+        // Opcode
+        this.opcode;
+
+        // DrawFlag
         this.drawFlag = false;
+
+        this.debug = new Debug();
     }
 
-    //Resets the CPU
+    // Resets the CPU
     reset() {
-        //Reset Memory, Registers, and Display
+        // Reset Memory, Registers, and Display
         this.memory.reset();
         this.registers.reset();
         this.display.reset();
-
-        //this.debug.reset();
     }
 
-    ///Loads a selected rom into an arrayBuffer then calls loadRomIntoMemory
+    // Loads a selected ROM into an arrayBuffer then calls loadRomIntoMemory
     async loadRom(rom) {
-        //Set arrayBuffer to arraybuffer from rom
         const arrayBuffer = await rom.arrayBuffer();
-        //Set romBuffer to new Uint8Array(arrayBuffer)
         const romBuffer = new Uint8Array(arrayBuffer);
 
-        //Load rombuffer array into memory
+        // Load ROM into memory
         this.loadRomIntoMemory(romBuffer);
 
-        //Set pause button text
+        // Set pause button text
         document.getElementById('pause').innerHTML = "Pause";
     }
 
-    //Load a given romBuffer into memory
+    // Load a given romBuffer into memory
     loadRomIntoMemory(romBuffer) {
-        //Reset the emulator
-        this.reset(); //Reset Registers, Memory, and Display
+        this.reset(); // Reset Registers, Memory, and Display
 
-        //Check romBuffer Length + Loader address is less than memory size
-        console.assert(romBuffer.length + LOAD_PROGRAM_ADDRESS <= MEMORY_SIZE, "Error rom is too large");
+        // Ensure the ROM size fits within memory
+        console.assert(romBuffer.length + LOAD_PROGRAM_ADDRESS <= MEMORY_SIZE, "Error: ROM is too large");
 
-        //Insert rom into memory at location 0x200 which is the address where programs start in chip8
+        // Insert ROM into memory starting at address 0x200
         this.memory.memory.set(romBuffer, LOAD_PROGRAM_ADDRESS);
     }
 
-    //CPU Cycle
-    //One CPU Cycle
+    // CPU Cycle
     cycle() {
         for (let i = 0; i < this.speed; i++) {
-            //Check if paused
-            if(!this.registers.paused) {
-                //Execute an instruction step
+            if (!this.registers.paused) {
                 this.step();
             }
         }
 
-        //Update timers
+        // Update timers
         this.registers.updateTimers();
 
-        //Call play sound
+        // Play sound
         this.speaker.playSound(this.registers.ST);
 
-        //Render only if flag is true
+        // Render display if drawFlag is true
         if (this.drawFlag) {
-            //Render display
             this.display.render();
-            //Set draw flag to false
             this.drawFlag = false;
         }
     }
 
-    //One Chip8 Instruction
+    // Executes one Chip8 instruction
     step() {
-        //Get opcode from memory. Opcode is two bytes
+        // Get opcode from memory (2 bytes)
         this.opcode = this.memory.getOpCode(this.registers.PC);
 
-        //Check that the opcode is not 0
         if (this.opcode !== 0) {
-            //Execute instruction sending opcode
+            // Execute instruction with opcode
             this.executeInstruction(this.opcode);
-
-            // //If debug mode is active
-            // if (this.debug.Active) {
-            //     // show registers
-            //     this.debug.DebugRegisters(this);
-            // }
+            this.debug.DebugRegisters(this);
         }
     }
 
     //Using Disassembler
     executeInstruction(opcode) {
-        //Increment the program counter for next instruction
-        //Each instruction is 2 bytes to increment by 2
+        // Increment the program counter (2 bytes per instruction)
         this.registers.nextInstruction();
-        
-        //Dissasemble opcode
-        const {
-            instruction,
-            args
-        } = this.disassember.disassemble(opcode);
-        const {
-            id
-        } = instruction;
+
+        // Disassemble the opcode
+        const { instruction, args } = this.disassembler.disassemble(opcode);
+
+        if (!instruction) {
+            console.error(`Invalid opcode: 0x${opcode.toString(16)}`);
+            return; // Exit if instruction is null
+        }
+
+        const { id } = instruction;
 
 
         //To hex or not to hex?
@@ -218,7 +203,7 @@ export class CPU {
 
                 //Set Vf to least significant bit and set Vx to Vy shifted right 1 bit
                 var vf = this.registers.V[args[1]] & 1;
-                this.registers.V[args[0]]  = this.registers.V[args[1]] >>= 1;
+                this.registers.V[args[0]] = this.registers.V[args[1]] >>= 1;
                 this.registers.V[0xF] = vf;
                 break;
             //8XY7
@@ -257,15 +242,15 @@ export class CPU {
                 break;
             //CXKK
             case 'RND_VX_KK':
-                let rand = Math.floor(Math.random() * 0xFF);
+                const rand = Math.floor(Math.random() * 0xFF);
 
                 this.registers.V[args[0]] = rand & (opcode & 0xFF);
                 break;
             //DXYN
             //Add checks to avoid OOB
             case 'DRW_VX_VY_N':
-                let width = SPRITE_WIDTH;
-                let height = (opcode & 0xF);
+                const width = SPRITE_WIDTH;
+                const height = (opcode & 0xF);
 
                 this.registers.V[0xF] = 0;
 
@@ -307,7 +292,7 @@ export class CPU {
             //Need to inquire how to properly stop and wait execution for keypress and release
             case 'LD_VX_K':
                 this.registers.paused = true;
-                this.keyboard.onNextKeyPress = function(key) {
+                this.keyboard.onNextKeyPress = function (key) {
                     this.registers.V[args[0]] = key;
                     this.registers.paused = false;
                 }.bind(this);
